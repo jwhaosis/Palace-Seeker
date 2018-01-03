@@ -42,11 +42,11 @@ public class UnitController : MonoBehaviour {
             name = "Fox"
         };
         unitObject.AddComponent<SpriteRenderer>();
-        unitObject.transform.position = new Vector3(0, 0, 0);
+        unitObject.transform.position = new Vector3(3, 3, 0);
         unitObject.transform.SetParent(this.transform, true);
         unitObject.GetComponent<SpriteRenderer>().sprite = foxSprite;
 
-        this.map.UnitArray[0,0] = new Unit(this.map, 0, 0, unitObject);
+        this.map.UnitArray[3,3] = new Unit(this.map, 3, 3, unitObject);
     }
 
 
@@ -60,6 +60,7 @@ public class UnitController : MonoBehaviour {
             if(checkSelected!=selectedUnit) {
                 selectedUnit = checkSelected;
                 if (selectedUnit != null) {
+                    selectedUnit.GenerateMovementGrid(true);
                     Debug.Log("Unit selected at " + x + "," + y + ".");
                 }
             }
