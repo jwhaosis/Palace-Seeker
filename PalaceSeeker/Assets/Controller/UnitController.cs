@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class UnitController : MonoBehaviour {
@@ -10,7 +11,6 @@ public class UnitController : MonoBehaviour {
 
     private Unit selectedUnit;
 
-    public Sprite foxSprite;
     private Vector3 mouseLocation;
 
     // Use this for initialization
@@ -23,7 +23,6 @@ public class UnitController : MonoBehaviour {
     void Update () {
         mouseLocation = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         SelectUnit();
-        MoveUnit();
     }
 
     //getters and setters--------------------------------------------------
@@ -38,44 +37,42 @@ public class UnitController : MonoBehaviour {
         enabled = true;
         this.map = map;
 
-        GameObject unitObject = new GameObject {
-            name = "Fox"
-        };
-        unitObject.AddComponent<SpriteRenderer>();
-        unitObject.transform.position = new Vector3(3, 3, 0);
-        unitObject.transform.SetParent(this.transform, true);
-        unitObject.GetComponent<SpriteRenderer>().sprite = foxSprite;
-
-        this.map.UnitArray[3,3] = new Unit(this.map, 3, 3, unitObject);
-    }
-
-
-    private void SelectUnit() {
-
-        if (Input.GetMouseButton(0)) {
-            int x = Mathf.FloorToInt(mouseLocation.x);
-            int y = Mathf.FloorToInt(mouseLocation.y);
-
-            Unit checkSelected = map.GetUnit(x, y);
-            if(checkSelected!=selectedUnit) {
-                selectedUnit = checkSelected;
-                if (selectedUnit != null) {
-                    selectedUnit.GenerateMovementGrid(true);
-                    Debug.Log("Unit selected at " + x + "," + y + ".");
+        for(int y = 0; y<map.Height; y++) {
+            for (int x = 0; x < map.Width; x++) {
+                if (!Tile.unreachableTypes.Contains(map.GetTile(x, y).Type)) {
+                    map.UnitArray[x, y] = new Unit(this.map, x, y, this);
+                    return;
                 }
             }
         }
     }
 
 
-    private void MoveUnit() {
+    private void SelectUnit() {
 
-        if (Input.GetMouseButton(1) && selectedUnit!= null) {
-            int x = Mathf.FloorToInt(mouseLocation.x);
-            int y = Mathf.FloorToInt(mouseLocation.y);
+        int x = Mathf.FloorToInt(mouseLocation.x);
+        int y = Mathf.FloorToInt(mouseLocation.y);
 
-            selectedUnit.MoveTo(x,y);
+
+        if (Input.GetMouseButton(0)) {
+            Unit checkSelected = map.GetUnit(x, y);
+            if(checkSelected!=selectedUnit) {
+                if (selectedUnit != null) {
+                    selectedUnit.Selected = false;
+                }
+                selectedUnit = checkSelected;
+                if (selectedUnit != null) {
+                    selectedUnit.Selected = true;
+                    Debug.Log("Unit selected at " + x + "," + y + ".");
+                }
+            }
+        } else if (Input.GetMouseButton(1) && selectedUnit != null) {
+            selectedUnit.MoveTo(x, y);
+            selectedUnit.Selected = false;
             selectedUnit = null;
+
         }
     }
+
+
 }

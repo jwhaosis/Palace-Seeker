@@ -5,6 +5,7 @@ using UnityEngine;
 public class WorldController : MonoBehaviour {
 
     private static WorldController _instance;
+    private static string layer = "Tile";
 
     public Sprite floorSprite;
 
@@ -34,7 +35,7 @@ public class WorldController : MonoBehaviour {
                     name = "Tile_" + x + "_" + y
                 };
 
-                tile_go.AddComponent<SpriteRenderer>();
+                tile_go.AddComponent<SpriteRenderer>().sortingLayerName = layer;
                 tile_go.transform.position = new Vector3(tile_data.X, tile_data.Y, 0);
                 tile_go.transform.SetParent(this.transform, true);
 

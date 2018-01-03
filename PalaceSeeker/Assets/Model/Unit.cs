@@ -6,6 +6,9 @@ using System;
 
 public class Unit {
 
+    public static string unitLayer = "Unit";
+    public static string actionLayer = "UnitTiles";
+
     World map;
     int x;
     int y;
@@ -39,27 +42,32 @@ public class Unit {
     }
 
     //methods--------------------------------------------------
-    public Unit(World map, int x, int y, GameObject unitObject) {
+    public Unit(World map, int x, int y, UnitController parent) {
         Debug.Log("Unit created at " + x + "," + y + ".");
         this.map = map;
         this.x = x;
         this.y = y;
-        this.unitObject = unitObject;
         this.movementSquares = new HashSet<Tile>();
+
+        GameObject unitObject = new GameObject();
+        unitObject.AddComponent<SpriteRenderer>().sortingLayerName = unitLayer;
+        unitObject.transform.SetParent(parent.transform);
+        unitObject.transform.position = new Vector3(x, y, 0);
+        unitObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Units/FoxSprite");
+
+        this.unitObject = unitObject;
         this.Selected = false;
 
         movement = 3;
 
     }
 
-    public bool MoveTo(int x, int y) {
+    public void MoveTo(int x, int y) {
         if (x >= map.Width || x < 0 || y >= map.Height || y < 0) {
             Debug.Log("Can not move out of map.");
-            return false;
         }
         if (Tile.unreachableTypes.Contains(map.GetTile(x, y).Type)) {
             Debug.Log("Can not move over invalid tiles.");
-            return false;
         }
         if (movementSquares.Contains(map.GetTile(x, y))) {
             map.UnitArray[this.x, this.y] = null;
@@ -67,16 +75,14 @@ public class Unit {
             this.x = x;
             this.y = y;
             unitObject.transform.position = new Vector3(x, y, 0);
-            this.Selected = false;
-            return true;
         } else {
             Debug.Log("Out of movement range.");
-            return false;
         }
     }
 
     public void GenerateMovementGrid(bool currentlySelected) {
         if (currentlySelected) {
+            movementSquares.Add(map.GetTile(x, y));
             ShowMovement(x,y, movement);
         } else {
             movementSquares.Clear();
@@ -94,56 +100,33 @@ public class Unit {
         }
         if (y < map.Height - 1) {
             Tile tile1 = map.GetTile(x, y + 1);
-            if (!Tile.unreachableTypes.Contains(tile1.Type)) {
-                if (movementSquares.Add(tile1)) {
-                    GameObject newTile = new GameObject();
-                    newTile.AddComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Tiles/MovementTile");
-                    newTile.transform.position = new Vector3(tile1.X, tile1.Y, 0);
-                    newTile.transform.SetParent(this.unitObject.transform, true);
-                }
-                ShowMovement(tile1.X, tile1.Y, moveRemaining);
-            }
-
+            ShowMovementVisuals(tile1, moveRemaining);
         }
         if (x < map.Width - 1) {
             Tile tile2 = map.GetTile(x + 1, y);
-            if (!Tile.unreachableTypes.Contains(tile2.Type)) {
-                if (movementSquares.Add(tile2)) {
-                    GameObject newTile = new GameObject();
-                    newTile.AddComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Tiles/MovementTile");
-                    newTile.transform.position = new Vector3(tile2.X, tile2.Y, 0);
-                    newTile.transform.SetParent(this.unitObject.transform, true);
-                }
-                ShowMovement(tile2.X, tile2.Y, moveRemaining);
-            }
-
+            ShowMovementVisuals(tile2, moveRemaining);
         }
         if (y > 0) {
             Tile tile3 = map.GetTile(x, y - 1);
-            if (!Tile.unreachableTypes.Contains(tile3.Type)) {
-                if (movementSquares.Add(tile3)) {
-                    GameObject newTile = new GameObject();
-                    newTile.AddComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Tiles/MovementTile");
-                    newTile.transform.position = new Vector3(tile3.X, tile3.Y, 0);
-                    newTile.transform.SetParent(this.unitObject.transform, true);
-                }
-                ShowMovement(tile3.X, tile3.Y, moveRemaining);
-            }
-
+            ShowMovementVisuals(tile3, moveRemaining);
         }
         if (x > 0) {
             Tile tile4 = map.GetTile(x - 1, y);
-            if (!Tile.unreachableTypes.Contains(tile4.Type)) {
-                if (movementSquares.Add(tile4)) {
-                    GameObject newTile = new GameObject();
-                    newTile.AddComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Tiles/MovementTile");
-                    newTile.transform.position = new Vector3(tile4.X, tile4.Y, 0);
-                    newTile.transform.SetParent(this.unitObject.transform, true);
-                }
-                ShowMovement(tile4.X, tile4.Y, moveRemaining);
-            }
-
+            ShowMovementVisuals(tile4, moveRemaining);
         }
 
+    }
+
+    private void ShowMovementVisuals(Tile tempTile, int moveRemaining) {
+        if (!Tile.unreachableTypes.Contains(tempTile.Type)) {
+            if (movementSquares.Add(tempTile)) {
+                GameObject newTile = new GameObject();
+                newTile.transform.SetParent(this.unitObject.transform, true);
+                newTile.AddComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Tiles/MovementTile");
+                newTile.GetComponent<SpriteRenderer>().sortingLayerName = actionLayer;
+                newTile.transform.position = new Vector3(tempTile.X, tempTile.Y, 0);
+            }
+            ShowMovement(tempTile.X, tempTile.Y, moveRemaining);
+        }
     }
 }
