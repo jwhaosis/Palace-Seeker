@@ -4,19 +4,19 @@ using System.Linq;
 using UnityEngine;
 using System;
 
-public class Unit {
+public abstract class Unit {
 
-    public static string unitLayer = "Unit";
-    public static string actionLayer = "UnitTiles";
+    protected static string unitLayer = "Unit";
+    protected static string actionLayer = "UnitTiles";
 
-    World map;
-    int x;
-    int y;
-    bool selected;
-    GameObject unitObject;
+    protected World map;
+    protected int x;
+    protected int y;
+    protected bool selected;
+    protected GameObject unitObject;
 
-    int movement;
-    HashSet<Tile> movementSquares;
+    protected int movement;
+    protected HashSet<Tile> movementSquares;
 
     //getters and setters--------------------------------------------------
     public int X {
@@ -42,7 +42,8 @@ public class Unit {
     }
 
     //methods--------------------------------------------------
-    public Unit(World map, int x, int y, UnitController parent) {
+
+    protected Unit(World map, int x, int y, string sprite, UnitController parent) {
         Debug.Log("Unit created at " + x + "," + y + ".");
         this.map = map;
         this.x = x;
@@ -53,28 +54,29 @@ public class Unit {
         unitObject.AddComponent<SpriteRenderer>().sortingLayerName = unitLayer;
         unitObject.transform.SetParent(parent.transform);
         unitObject.transform.position = new Vector3(x, y, 0);
-        unitObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Units/FoxSprite");
+        unitObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(sprite);
 
         this.unitObject = unitObject;
         this.Selected = false;
-
-        movement = 3;
-
     }
 
     public void MoveTo(int x, int y) {
         if (x >= map.Width || x < 0 || y >= map.Height || y < 0) {
             Debug.Log("Can not move out of map.");
         }
-        if (Tile.unreachableTypes.Contains(map.GetTile(x, y).Type)) {
+        else if (Tile.unreachableTypes.Contains(map.GetTile(x, y).Type)) {
             Debug.Log("Can not move over invalid tiles.");
         }
-        if (movementSquares.Contains(map.GetTile(x, y))) {
-            map.UnitArray[this.x, this.y] = null;
-            map.UnitArray[x, y] = this;
-            this.x = x;
-            this.y = y;
-            unitObject.transform.position = new Vector3(x, y, 0);
+        else if (movementSquares.Contains(map.GetTile(x, y))) {
+            if (map.GetUnit(x, y) != null) {
+                Debug.Log("Can not move to an occupied square.");
+            } else {
+                map.UnitArray[this.x, this.y] = null;
+                map.UnitArray[x, y] = this;
+                this.x = x;
+                this.y = y;
+                unitObject.transform.position = new Vector3(x, y, 0);
+            }
         } else {
             Debug.Log("Out of movement range.");
         }

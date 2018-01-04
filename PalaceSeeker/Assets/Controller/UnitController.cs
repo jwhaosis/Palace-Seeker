@@ -13,13 +13,14 @@ public class UnitController : MonoBehaviour {
 
     private Vector3 mouseLocation;
 
-    // Use this for initialization
-    void Start () {
+    private void Awake() {
         _instance = this;
         enabled = false;
     }
 
-    // Update is called once per frame
+    void Start () {
+    }
+
     void Update () {
         mouseLocation = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         SelectUnit();
@@ -33,14 +34,27 @@ public class UnitController : MonoBehaviour {
     }
 
     //methods--------------------------------------------------
-    public void CreateUnit(World map) {
-        enabled = true;
+    public void Initialize(World map) {
         this.map = map;
+        enabled = true;
+    }
 
+    public void CreateUnit(int charCode) {
+        Debug.Log("In create unit.");
         for(int y = 0; y<map.Height; y++) {
             for (int x = 0; x < map.Width; x++) {
                 if (!Tile.unreachableTypes.Contains(map.GetTile(x, y).Type)) {
-                    map.UnitArray[x, y] = new Unit(this.map, x, y, this);
+                    if (charCode == 0) {
+                        map.UnitArray[x, y] = new Joker(this.map, x, y, this);
+                    } else if (charCode == 1) {
+                        map.UnitArray[x, y] = new Skull(this.map, x, y, this);
+                    }
+                    else if (charCode == 2) {
+                        map.UnitArray[x, y] = new Panther(this.map, x, y, this);
+                    }
+                    else if (charCode == 3) {
+                        map.UnitArray[x, y] = new Fox(this.map, x, y, this);
+                    }
                     return;
                 }
             }

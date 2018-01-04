@@ -9,7 +9,7 @@ public class WorldController : MonoBehaviour {
 
     public Sprite floorSprite;
 
-    World world;
+    World map;
 
     public static WorldController Instance {
         get {
@@ -19,18 +19,21 @@ public class WorldController : MonoBehaviour {
 
     public World World {
         get {
-            return world;
+            return map;
         }
     }
 
-    void Start() {
-        world = new World();
+    private void Awake() {
         _instance = this;
-        //create visuals for tiles
-        for (int x = 0; x < world.Width; x++) {
-            for (int y = 0; y < world.Height; y++) {
+    }
 
-                Tile tile_data = world.GetTile(x, y);
+    void Start() {
+        map = new World();
+        //create visuals for tiles
+        for (int x = 0; x < map.Width; x++) {
+            for (int y = 0; y < map.Height; y++) {
+
+                Tile tile_data = map.GetTile(x, y);
                 GameObject tile_go = new GameObject {
                     name = "Tile_" + x + "_" + y
                 };
@@ -43,14 +46,13 @@ public class WorldController : MonoBehaviour {
                 tile_data.AddOnTileTypeChangeAction((tile) => { ChangeTileSprite(tile, tile_go); });
             }
         }
-
-        world.GenerateWorld();
+        map.GenerateWorld();
+        UnitController.Instance.Initialize(map);
     }
 
 
     // Update is called once per frame
     void Update() {
-        SummonUnit();
     }
 
     void ChangeTileSprite(Tile tile_data, GameObject tile_go) {
@@ -66,15 +68,6 @@ public class WorldController : MonoBehaviour {
         int x = Mathf.FloorToInt(coord.x);
         int y = Mathf.FloorToInt(coord.y);
 
-        return world.GetTile(x, y);
+        return map.GetTile(x, y);
     }
-
-
-    //UNIT CONTROLS, PROBABLY PUT INTO PLAYER CONTROLLER LATER
-    private void SummonUnit() {
-        if (Input.GetKeyDown("space")) {
-            UnitController.Instance.CreateUnit(this.world);
-        }
-    }
-
 }
