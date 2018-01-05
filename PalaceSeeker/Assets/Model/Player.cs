@@ -53,8 +53,13 @@ public class Player {
         }
     }
 
-    public bool IsComplete() {
+    public bool IsCompleteUnits() {
+        return unitOne != null && unitTwo != null;
+    }
+
+    public bool IsCompleteAll() {
         return unitOne != null && unitTwo != null && leader != null;
     }
+
 
 }

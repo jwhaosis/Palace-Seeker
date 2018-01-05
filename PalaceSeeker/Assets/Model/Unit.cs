@@ -44,7 +44,6 @@ public abstract class Unit {
     //methods--------------------------------------------------
 
     protected Unit(World map, int x, int y, string sprite, UnitController parent) {
-        Debug.Log("Unit created at " + x + "," + y + ".");
         this.map = map;
         this.x = x;
         this.y = y;
