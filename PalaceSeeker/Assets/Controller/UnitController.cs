@@ -40,10 +40,12 @@ public class UnitController : MonoBehaviour {
     }
 
     public void CreateUnit(int charCode) {
-        Debug.Log("In create unit.");
-        for(int y = 0; y<map.Height; y++) {
+
+        Player currentPlayer = PlayerController.Instance.GetCurrentPlayer();
+
+        for (int y = 0; y<map.Height; y++) {
             for (int x = 0; x < map.Width; x++) {
-                if (!Tile.unreachableTypes.Contains(map.GetTile(x, y).Type)) {
+                if (!Tile.unreachableTypes.Contains(map.GetTile(x, y).Type) && map.GetUnit(x,y)==null) {
                     if (charCode == 0) {
                         map.UnitArray[x, y] = new Joker(this.map, x, y, this);
                     } else if (charCode == 1) {
@@ -54,7 +56,10 @@ public class UnitController : MonoBehaviour {
                     }
                     else if (charCode == 3) {
                         map.UnitArray[x, y] = new Fox(this.map, x, y, this);
+                    } else {
+                        Debug.Log(charCode + " is not a valid character code.");
                     }
+                    currentPlayer.AddUnit(map.UnitArray[x, y]);
                     return;
                 }
             }

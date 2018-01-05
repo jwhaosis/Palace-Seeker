@@ -4,13 +4,36 @@ using UnityEngine;
 
 public class LeaderController : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
+    private static LeaderController _instance;
+
+    public static LeaderController Instance {
+        get {
+            return _instance;
+        }
+
+        set {
+            _instance = value;
+        }
+    }
+
+    private void Awake() {
+        _instance = this;
+    }
+
+    void Start () {
 	}
 	
-	// Update is called once per frame
 	void Update () {
-		
 	}
+
+    public void CreateLeader(int leadCode) {
+
+        Player currentPlayer = PlayerController.Instance.GetCurrentPlayer();
+
+        if (leadCode == 0) {
+            currentPlayer.AddLeader(new Hifumi(currentPlayer));
+        } else if (leadCode == 1) {
+            currentPlayer.AddLeader(new Futaba(currentPlayer));
+        }
+    }
 }

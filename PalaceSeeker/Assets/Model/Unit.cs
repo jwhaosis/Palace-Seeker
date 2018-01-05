@@ -131,4 +131,14 @@ public abstract class Unit {
             ShowMovement(tempTile.X, tempTile.Y, moveRemaining);
         }
     }
+
+    public void ChangeUnitStats(string stat, int change) {
+        this.movement += change;
+    }
+
+    public void Delete() {
+        Debug.Log("Unit GameObject Removed.");
+        this.map.UnitArray[this.x, this.y] = null;
+        GameObject.Destroy(unitObject);
+    }
 }

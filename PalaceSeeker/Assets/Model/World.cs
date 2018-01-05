@@ -77,6 +77,13 @@ public class World {
         return unitArray[x, y];
     }
 
+    public void RemoveUnit(int x, int y) {
+        if (x >= width || x < 0 || y >= height || y < 0) {
+            return;
+        }
+        UnitArray[x, y] = null;
+    }
+
 
     public void GenerateWorld() {
         MapGenerator2 floorGenerator = new MapGenerator2(this);
