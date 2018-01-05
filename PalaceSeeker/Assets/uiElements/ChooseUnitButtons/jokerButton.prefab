@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 222376558364485594}
   - component: {fileID: 114837480747045024}
   - component: {fileID: 114775681546540248}
-  - component: {fileID: 114636066351946896}
+  - component: {fileID: 114190833643117222}
   m_Layer: 5
   m_Name: jokerButton
   m_TagString: Untagged
@@ -47,6 +47,55 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114190833643117222
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1075287006454898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 114705488396154826, guid: 10921e44ec0860d4a818a23839b48012,
+            type: 2}
+          m_MethodName: ChangeSpriteSelect
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1075287006454898}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 114705488396154826, guid: 10921e44ec0860d4a818a23839b48012,
+            type: 2}
+          m_MethodName: ChangeSpriteUnselect
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1075287006454898}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!114 &114529552400433370
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -80,37 +129,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
---- !u!114 &114636066351946896
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1075287006454898}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 114393110995898292, guid: 48a4e70f5a6853a468c2ed055a3fcf9f,
-            type: 2}
-          m_MethodName: ChangeSprite
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 1075287006454898}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
-        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  delegates: []
 --- !u!114 &114775681546540248
 MonoBehaviour:
   m_ObjectHideFlags: 1

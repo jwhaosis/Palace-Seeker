@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ChooseUnit : MonoBehaviour {
 
@@ -27,9 +26,5 @@ public class ChooseUnit : MonoBehaviour {
 
     public void DisableButton(GameObject button) {
         button.SetActive(false);
-    }
-
-    public void ChangeSprite(GameObject button) {
-        button.GetComponent<Image>().sprite = Resources.Load<Sprite>("Units/SelectionSprites/JokerSelected");
     }
 }
