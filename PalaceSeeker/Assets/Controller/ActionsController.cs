@@ -17,27 +17,22 @@ public class ActionsController : MonoBehaviour {
     public GameObject cancelButton;
 
     private GameObject[] actions;
-    private bool menuActive;
+    public Unit selectedUnit;
 
     public static ActionsController Instance {
         get {
             return _instance;
         }
-
-        set {
-            _instance = value;
-        }
     }
 
-    private void Awake() {
+    void Start() {
         _instance = this;
         actions = new GameObject[2];
     }
 
-    public void CreateActionMenu(Vector3 mouseLocation) {
-        if (menuActive == true) {
-            return;
-        }
+    public void CreateActionMenu(Unit selectedUnit, Vector3 mouseLocation) {
+        this.selectedUnit = selectedUnit;
+
         actions[0] = Instantiate(menuOutline);
         //actions[1] = Instantiate(menuName);
         actions[1] = Instantiate(moveButton);
@@ -48,12 +43,12 @@ public class ActionsController : MonoBehaviour {
         //Debug.Log(mouseLocation.x + "," + mouseLocation.y);
         foreach (GameObject buttons in actions) {
             buttons.transform.SetParent(canvas.transform, false);
-            float adjustX = canvas.transform.position.x;
-            float adjustY = canvas.transform.position.y;
-            buttons.transform.position = new Vector3(mouseLocation.x+adjustX, mouseLocation.y+adjustY, 0);
         }
-        menuActive = true;
+    }
 
+    public void moveUnit() {
+        Instantiate(menuName).transform.SetParent(canvas.transform, false);
+        selectedUnit.Selected = true;
     }
 
 }

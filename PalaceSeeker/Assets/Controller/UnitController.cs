@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class UnitController : MonoBehaviour {
 
+    public GameObject canvas;
+
     private static UnitController _instance;
 
     World map;
@@ -23,6 +25,9 @@ public class UnitController : MonoBehaviour {
 
     void Update () {
         mouseLocation = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (Input.GetKeyDown("space")) {
+            CreateMenu();
+        }
         SelectUnit();
     }
 
@@ -73,9 +78,7 @@ public class UnitController : MonoBehaviour {
 
         if (Input.GetMouseButton(0)) {
             Unit checkSelected = map.GetUnit(x, y);
-            if(checkSelected!=selectedUnit) {
-                //ActionsController.Instance.CreateActionMenu(mouseLocation); 
-
+            if(checkSelected!=selectedUnit && checkSelected!=null) {
                 if (selectedUnit != null) {
                     selectedUnit.Selected = false;
                 }
@@ -92,7 +95,22 @@ public class UnitController : MonoBehaviour {
         }
     }
 
-    public void CommandUnit() {
-        ActionsController temp = new ActionsController();
+    public void CreateMenu() {
+        Debug.Log("creating menu");
+        GameObject moveButton = new GameObject();
+        moveButton.transform.SetParent(canvas.transform, true);
+        moveButton.AddComponent<SpriteRenderer>();
+        moveButton.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Tiles/AttackTile");
+
+        moveButton.GetComponent<SpriteRenderer>().transform.localScale = new Vector3(1, 1, 1);
+        moveButton.GetComponent<SpriteRenderer>().transform.position = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 10));
+
+        float width = moveButton.GetComponent<SpriteRenderer>().sprite.bounds.size.x;
+        float height = moveButton.GetComponent<SpriteRenderer>().sprite.bounds.size.y;
+
+        float worldScreenHeight = System.Convert.ToSingle(Camera.main.orthographicSize * 2.0);
+        float worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
+
+        moveButton.GetComponent<SpriteRenderer>().transform.localScale = new Vector3((worldScreenWidth / width)/4, worldScreenHeight / height / 2,0);
     }
 }
