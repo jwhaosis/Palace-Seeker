@@ -740,6 +740,56 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1891592931
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1891592933}
+  - component: {fileID: 1891592932}
+  m_Layer: 0
+  m_Name: ActionsController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1891592932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1891592931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf57e0404b0d514eba3a5ae610ca394, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 1059190537}
+  menuName: {fileID: 1291078282334750, guid: 782aa64e1f4bbf245a38a1686cbd1243, type: 2}
+  menuOutline: {fileID: 1464839755635134, guid: 0543e025472521049b9bc7a65fe13589,
+    type: 2}
+  moveButton: {fileID: 1734383215784882, guid: 1eb48f91196006c429a4333f36bbe63c, type: 2}
+  attackButton: {fileID: 1322477466245942, guid: 781c2a34fdd1c434cba7871d98257f4a,
+    type: 2}
+  waitButton: {fileID: 1784434112129246, guid: 55b1fd2a942c2584eb5ebe1c1b8d9fa2, type: 2}
+  cancelButton: {fileID: 1909803493246554, guid: 7f36c6d118304cc43bd9ac5720ed3d2a,
+    type: 2}
+--- !u!4 &1891592933
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1891592931}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.4215975, y: 6.426189, z: 11}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1937089516
 GameObject:
   m_ObjectHideFlags: 0

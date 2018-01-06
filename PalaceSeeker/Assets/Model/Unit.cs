@@ -14,9 +14,12 @@ public abstract class Unit {
     protected int y;
     protected bool selected;
     protected GameObject unitObject;
+    protected HashSet<Tile> movementSquares;
 
     protected int movement;
-    protected HashSet<Tile> movementSquares;
+    protected int health;
+    protected int attack;
+    protected int defense;
 
     //getters and setters--------------------------------------------------
     public int X {
@@ -82,6 +85,7 @@ public abstract class Unit {
     }
 
     public void GenerateMovementGrid(bool currentlySelected) {
+        //Debug.Log(x + ", " + y);
         if (currentlySelected) {
             movementSquares.Add(map.GetTile(x, y));
             ShowMovement(x,y, movement);

@@ -8,6 +8,9 @@ public class Fox : Unit {
 
     public Fox(World map, int x, int y, UnitController parent) : base(map, x, y, sprite, parent) {
         movement = 4;
+        health = 8;
+        attack = 7;
+        defense = 4;
     }
 
 }

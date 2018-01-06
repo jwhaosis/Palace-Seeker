@@ -9,9 +9,9 @@ public class UnitController : MonoBehaviour {
 
     World map;
 
-    private Unit selectedUnit;
+    Unit selectedUnit;
 
-    private Vector3 mouseLocation;
+    Vector3 mouseLocation;
 
     private void Awake() {
         _instance = this;
@@ -66,16 +66,16 @@ public class UnitController : MonoBehaviour {
         }
     }
 
-
-    private void SelectUnit() {
+    public void SelectUnit() {
 
         int x = Mathf.FloorToInt(mouseLocation.x);
         int y = Mathf.FloorToInt(mouseLocation.y);
 
-
         if (Input.GetMouseButton(0)) {
             Unit checkSelected = map.GetUnit(x, y);
             if(checkSelected!=selectedUnit) {
+                //ActionsController.Instance.CreateActionMenu(mouseLocation); 
+
                 if (selectedUnit != null) {
                     selectedUnit.Selected = false;
                 }
@@ -89,9 +89,10 @@ public class UnitController : MonoBehaviour {
             selectedUnit.MoveTo(x, y);
             selectedUnit.Selected = false;
             selectedUnit = null;
-
         }
     }
 
-
+    public void CommandUnit() {
+        ActionsController temp = new ActionsController();
+    }
 }
