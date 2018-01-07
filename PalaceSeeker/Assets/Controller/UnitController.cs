@@ -80,7 +80,7 @@ public class UnitController : MonoBehaviour {
         int x = Mathf.FloorToInt(mouseLocation.x);
         int y = Mathf.FloorToInt(mouseLocation.y);
 
-        if (Input.GetMouseButton(0)) {
+        if (Input.GetKeyDown(KeyCode.Mouse0)) {
             Unit checkSelected = map.GetUnit(x, y);
             if(checkSelected != null && checkSelected.unitType == "enemy") {
                 return;
@@ -98,13 +98,13 @@ public class UnitController : MonoBehaviour {
                 Debug.Log("Unit selected at " + x + "," + y + ".");
             }
         }
-        else if (Input.GetMouseButton(1) && selectedUnit != null && !selectedUnit.Moved && selectedUnit.MoveTo(x, y)) {
+        else if (Input.GetKeyDown(KeyCode.Mouse1) && selectedUnit != null && !selectedUnit.Moved && selectedUnit.MoveTo(x, y)) {
             if (!this.menuActive) {
                 CreateMenu();
                 this.menuActive = true;
             }
         }
-        else if (Input.GetMouseButton(1) && selectedUnit != null && selectedUnit.Moved && selectedUnit.Attack(x, y)) {
+        else if (Input.GetKeyDown(KeyCode.Mouse1) && selectedUnit != null && selectedUnit.Moved && selectedUnit.Attack(x, y)) {
             if (this.menuActive) {
                 selectedUnit.Selected = false;
                 selectedUnit.Moved = false;
@@ -114,6 +114,8 @@ public class UnitController : MonoBehaviour {
         }
     }
 
+
+    //delete these and move them to a new monobehavior probably
     public void CreateUnitFrames() {
         GameObject unitFrame1 = new GameObject();
         unitFrame1.transform.SetParent(canvas.transform, true);

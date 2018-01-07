@@ -93,9 +93,6 @@ public abstract class Unit {
     }
 
     public bool MoveTo(int x, int y) {
-        if(x == this.x && y == this.y) {
-            return false;
-        }
         if (x >= map.Width || x < 0 || y >= map.Height || y < 0) {
             Debug.Log("Can not move out of map.");
             return false;
@@ -105,7 +102,7 @@ public abstract class Unit {
             return false;
         }
         else if (movementSquares.Contains(map.GetTile(x, y))) {
-            if (map.GetUnit(x, y) != null) {
+            if (map.GetUnit(x, y) != null && map.GetUnit(x, y) != this) {
                 Debug.Log("Can not move to an occupied square.");
                 return false;
             }
