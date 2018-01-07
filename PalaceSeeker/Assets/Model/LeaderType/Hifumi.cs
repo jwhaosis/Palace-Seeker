@@ -9,6 +9,6 @@ public class Hifumi : Leader{
     }
 
     public override void LeaderEffectStage0() {
-        player.ChangeAllUnitStats("movement", 3);
+        player.ChangeAllUnitStats(Unit.UnitStats.Movement, 3);
     }
 }

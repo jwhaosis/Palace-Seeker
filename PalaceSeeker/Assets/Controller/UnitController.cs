@@ -44,7 +44,12 @@ public class UnitController : MonoBehaviour {
     public void Initialize(World map) {
         this.map = map;
         enabled = true;
-        map.UnitArray[10, 10] = new PyroJack(this.map, 10, 10, this);
+        map.TileArray[4, 4].Type = Tile.TileType.Floor;
+        map.UnitArray[4, 4] = new PyroJack(this.map, 4, 4, this);
+
+        map.TileArray[6, 2].Type = Tile.TileType.Floor;
+        map.UnitArray[6, 2] = new PyroJack(this.map, 6, 2, this);
+
     }
 
     public void CreateUnit(int charCode) {
@@ -104,7 +109,7 @@ public class UnitController : MonoBehaviour {
                 this.menuActive = true;
             }
         }
-        else if (Input.GetKeyDown(KeyCode.Mouse1) && selectedUnit != null && selectedUnit.Moved && selectedUnit.Attack(x, y)) {
+        else if (Input.GetKeyDown(KeyCode.Mouse1) && selectedUnit != null && selectedUnit.Moved && selectedUnit.AttackSquare(x, y)) {
             if (this.menuActive) {
                 selectedUnit.Selected = false;
                 selectedUnit.Moved = false;
@@ -160,7 +165,7 @@ public class UnitController : MonoBehaviour {
 
     public void ClickMenuButton() {
 
-        if (Input.GetMouseButton(0) && selectedUnit!= null) {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && selectedUnit!= null) {
             RaycastHit2D moveButtonHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if(moveButtonHit.collider == null) {
                 return;

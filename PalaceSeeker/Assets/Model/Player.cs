@@ -20,7 +20,7 @@ public class Player {
         this.playerNum = playerNum;
     }
 
-    public void ChangeAllUnitStats(string stat, int change) {
+    public void ChangeAllUnitStats(Unit.UnitStats stat, int change) {
         unitOne.ChangeUnitStats(stat, change);
         unitTwo.ChangeUnitStats(stat, change);
     }

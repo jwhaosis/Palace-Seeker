@@ -8,6 +8,7 @@ public abstract class Unit {
 
     protected static string unitLayer = "Unit";
     protected static string actionLayer = "UnitTiles";
+    public enum UnitStats { Health, Attack, Defense, Movement };
 
     protected World map;
     protected int x;
@@ -71,6 +72,24 @@ public abstract class Unit {
         }
     }
 
+    public int Health {
+        get {
+            return health;
+        }
+    }
+
+    public int Attack {
+        get {
+            return attack;
+        }
+    }
+
+    public int Defense {
+        get {
+            return defense;
+        }
+    }
+
     //methods--------------------------------------------------
 
     protected Unit(World map, int x, int y, string sprite, UnitController parent) {
@@ -122,7 +141,7 @@ public abstract class Unit {
         }
     }
 
-    public bool Attack(int x, int y) {
+    public bool AttackSquare(int x, int y) {
         if (x == this.x && y == this.y) {
             return false;
         }
@@ -138,6 +157,8 @@ public abstract class Unit {
             }
             else {
                 Debug.Log("Attacked " + x + ", " + y + ".");
+                Combat thisCombat = new Combat(this, map.GetUnit(x, y));
+                thisCombat.CalculateCombat();
                 GenerateAttackGrid(false);
                 return true;
             }
@@ -214,12 +235,25 @@ public abstract class Unit {
         }
     }
 
-    public void ChangeUnitStats(string stat, int change) {
-        this.movement += change;
+    public void ChangeUnitStats(Unit.UnitStats stat, int change) {
+        if(stat == UnitStats.Attack) {
+            attack += change;
+        } else if (stat == UnitStats.Defense) {
+            defense += change;
+        }
+        else if (stat == UnitStats.Health) {
+            health += change;
+            if (health <= 0) {
+                this.Delete();
+            }
+        }
+        else if (stat == UnitStats.Movement) {
+            movement += change;
+        }
     }
 
     public void Delete() {
-        Debug.Log("Unit GameObject Removed.");
+        Debug.Log("Unit GameObject Deleted.");
         this.map.UnitArray[this.x, this.y] = null;
         GameObject.Destroy(unitObject);
     }
