@@ -2,15 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : Unit{
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public Enemy(World map, int x, int y, string sprite, UnitController parent) : base(map, x, y, sprite, parent) {
+        this.unitType = "enemy";
+    }
 }
