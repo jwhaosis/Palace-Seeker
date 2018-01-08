@@ -47,11 +47,11 @@ TagManager:
   - name: Tile
     uniqueID: 97369509
     locked: 0
-  - name: UnitTiles
-    uniqueID: 3048363687
-    locked: 0
   - name: Unit
     uniqueID: 1009655581
+    locked: 0
+  - name: UnitTiles
+    uniqueID: 3048363687
     locked: 0
   - name: Cursor
     uniqueID: 4003844255

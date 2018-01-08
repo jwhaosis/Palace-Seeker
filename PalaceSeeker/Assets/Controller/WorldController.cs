@@ -8,6 +8,8 @@ public class WorldController : MonoBehaviour {
     private static string layer = "Tile";
 
     public Sprite floorSprite;
+    public Sprite wallSprite;
+
 
     World map;
 
@@ -60,7 +62,7 @@ public class WorldController : MonoBehaviour {
             tile_go.GetComponent<SpriteRenderer>().sprite = floorSprite;
         }
         else {
-            tile_go.GetComponent<SpriteRenderer>().sprite = null;
+            tile_go.GetComponent<SpriteRenderer>().sprite = wallSprite;
         }
     }
 
