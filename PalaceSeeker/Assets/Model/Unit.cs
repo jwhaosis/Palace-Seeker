@@ -235,8 +235,11 @@ public abstract class Unit {
     }
 
     private void ShowVisuals(Tile tempTile, int moveRemaining, int minRange, string sprite, HashSet<Tile> tileArray) {
-        if (!Tile.unreachableTypes.Contains(tempTile.Type)) {
-            if (tileArray.Add(tempTile) && minRange<=0) {
+        if(sprite.Contains("Movement") && map.GetUnit(tempTile.X, tempTile.Y) != null && map.GetUnit(tempTile.X, tempTile.Y).controller != this.controller) {
+            return;
+        }
+        else if (!Tile.unreachableTypes.Contains(tempTile.Type)) {
+            if ((tileArray.Add(tempTile) && minRange<=0)) {
                 GameObject newTile = new GameObject();
                 newTile.transform.SetParent(this.unitObject.transform, true);
                 newTile.AddComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(sprite);
