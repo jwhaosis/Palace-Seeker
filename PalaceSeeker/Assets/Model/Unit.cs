@@ -20,6 +20,7 @@ public abstract class Unit {
     protected GameObject unitObject;
     protected HashSet<Tile> movementSquares;
     protected HashSet<Tile> attackSquares;
+    protected Player controller;
     public string unitType;
 
     protected int movement;
@@ -90,9 +91,15 @@ public abstract class Unit {
         }
     }
 
+    public Player Controller {
+        get {
+            return controller;
+        }
+    }
+
     //methods--------------------------------------------------
 
-    protected Unit(World map, int x, int y, string sprite, UnitController parent) {
+    protected Unit(World map, int x, int y, string sprite) {
         this.map = map;
         this.x = x;
         this.y = y;
@@ -101,10 +108,11 @@ public abstract class Unit {
 
         GameObject unitObject = new GameObject();
         unitObject.AddComponent<SpriteRenderer>().sortingLayerName = unitLayer;
-        unitObject.transform.SetParent(parent.transform);
+        unitObject.transform.SetParent(UnitController.Instance.transform);
         unitObject.transform.position = new Vector3(x, y, 0);
         unitObject.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(sprite);
 
+        this.controller = PlayerController.Instance.GetCurrentPlayer();
         this.unitObject = unitObject;
         this.Selected = false;
         this.moved = false;
@@ -150,10 +158,14 @@ public abstract class Unit {
             return false;
         }
         else if (attackSquares.Contains(map.GetTile(x, y))) {
-            if (map.GetUnit(x, y) == null) {
+            Unit targetUnit = map.GetUnit(x, y);
+            if (targetUnit == null) {
                 Debug.Log("Can not attack an unoccupied square.");
                 GenerateAttackGrid(false);
                 return true;
+            } else if (targetUnit.controller == this.controller) {
+                Debug.Log("Can not attack friendly units.");
+                return false;
             }
             else {
                 Debug.Log("Attacked " + x + ", " + y + ".");
@@ -256,5 +268,6 @@ public abstract class Unit {
         Debug.Log("Unit GameObject Deleted.");
         this.map.UnitArray[this.x, this.y] = null;
         GameObject.Destroy(unitObject);
+        
     }
 }

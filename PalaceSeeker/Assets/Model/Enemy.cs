@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Enemy : Unit{
 
-    public Enemy(World map, int x, int y, string sprite, UnitController parent) : base(map, x, y, sprite, parent) {
+    public Enemy(World map, int x, int y, string sprite) : base(map, x, y, sprite) {
         this.unitType = "enemy";
+        this.controller = null;
     }
 }

@@ -6,7 +6,7 @@ public class Skull : Unit {
 
     private static string sprite = "Units/SkullSprite";
 
-    public Skull(World map, int x, int y, UnitController parent) : base(map, x, y, sprite, parent) {
+    public Skull(World map, int x, int y) : base(map, x, y, sprite) {
         unitObject.name = "Skull";
         unitType = "Skull";
 

@@ -6,7 +6,7 @@ public class Panther : Unit {
 
     private static string sprite = "Units/PantherSprite";
 
-    public Panther(World map, int x, int y, UnitController parent) : base(map, x, y, sprite, parent) {
+    public Panther(World map, int x, int y) : base(map, x, y, sprite) {
         unitObject.name = "Panther";
         unitType = "Panther";
 

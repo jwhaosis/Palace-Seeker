@@ -45,10 +45,10 @@ public class UnitController : MonoBehaviour {
         this.map = map;
         enabled = true;
         map.TileArray[4, 4].Type = Tile.TileType.Floor;
-        map.UnitArray[4, 4] = new PyroJack(this.map, 4, 4, this);
+        map.UnitArray[4, 4] = new PyroJack(this.map, 4, 4);
 
         map.TileArray[6, 2].Type = Tile.TileType.Floor;
-        map.UnitArray[6, 2] = new PyroJack(this.map, 6, 2, this);
+        map.UnitArray[6, 2] = new PyroJack(this.map, 6, 2);
 
     }
 
@@ -60,15 +60,15 @@ public class UnitController : MonoBehaviour {
             for (int x = 0; x < map.Width; x++) {
                 if (!Tile.unreachableTypes.Contains(map.GetTile(x, y).Type) && map.GetUnit(x,y)==null) {
                     if (charCode == 0) {
-                        map.UnitArray[x, y] = new Joker(this.map, x, y, this);
+                        map.UnitArray[x, y] = new Joker(this.map, x, y);
                     } else if (charCode == 1) {
-                        map.UnitArray[x, y] = new Skull(this.map, x, y, this);
+                        map.UnitArray[x, y] = new Skull(this.map, x, y);
                     }
                     else if (charCode == 2) {
-                        map.UnitArray[x, y] = new Panther(this.map, x, y, this);
+                        map.UnitArray[x, y] = new Panther(this.map, x, y);
                     }
                     else if (charCode == 3) {
-                        map.UnitArray[x, y] = new Fox(this.map, x, y, this);
+                        map.UnitArray[x, y] = new Fox(this.map, x, y);
                     } else {
                         Debug.Log(charCode + " is not a valid character code.");
                     }
@@ -87,7 +87,7 @@ public class UnitController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Mouse0)) {
             Unit checkSelected = map.GetUnit(x, y);
-            if(checkSelected != null && checkSelected.unitType == "enemy") {
+            if(checkSelected != null && (checkSelected.unitType == "enemy" || checkSelected.Controller!=PlayerController.Instance.GetCurrentPlayer())) {
                 return;
             }
             if (checkSelected != null && checkSelected != selectedUnit && !checkSelected.TurnFinished) {

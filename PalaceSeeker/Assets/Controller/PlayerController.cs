@@ -9,22 +9,19 @@ public class PlayerController : MonoBehaviour {
 
     public Player playerOne;
     public Player playerTwo;
+    public Player currentPlayer;
 
     public static PlayerController Instance {
         get {
             return _instance;
         }
-
-        set {
-            _instance = value;
-        }
     }
 
     // Use this for initialization
-    void Start () {
-
-        this.playerOne = new Player(1);
-        this.playerTwo = new Player(2);
+    public void Awake () {
+        playerOne = new Player(1);
+        playerTwo = new Player(2);
+        currentPlayer = playerOne;
         _instance = this;
     }
 

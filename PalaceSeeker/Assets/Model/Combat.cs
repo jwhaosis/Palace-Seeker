@@ -20,7 +20,7 @@ public class Combat {
         Debug.Log(defendingUnit.unitType + " has " + defendingUnit.Health + " health. " + attackingUnit.unitType + " attacks for " + damage + " damage.");
         Debug.Log(defendingUnit.unitType + " has " + (defendingUnit.Health - damage) + " health remaining.");
         defendingUnit.ChangeUnitStats(Unit.UnitStats.Health, -damage);
-        if(defendingUnit != null) {
+        if(defendingUnit.Health>0) {
             damage = defendingUnit.Attack - attackingUnit.Defense;
             if (damage < 0) {
                 damage = 0;

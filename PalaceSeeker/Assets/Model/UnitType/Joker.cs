@@ -6,7 +6,7 @@ public class Joker : Unit {
 
     private static string sprite = "Units/JokerSprite";
 
-    public Joker(World map, int x, int y, UnitController parent) : base(map, x, y, sprite, parent) {
+    public Joker(World map, int x, int y) : base(map, x, y, sprite) {
         unitObject.name = "Joker";
         unitType = "Joker";
 

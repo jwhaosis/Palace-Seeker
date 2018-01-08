@@ -6,11 +6,11 @@ public class PyroJack : Enemy {
 
     static string sprite = "Units/Enemies/PyroJack";
 
-    public PyroJack(World map, int x, int y, UnitController parent) : base(map, x, y, sprite, parent) {
+    public PyroJack(World map, int x, int y) : base(map, x, y, sprite) {
         movement = 2;
         rangeMin = 1;
         rangeMax = 1;
-        health = 20;
+        health = 8;
         attack = 10;
         defense = 1;
     }
