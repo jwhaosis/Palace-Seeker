@@ -107,12 +107,14 @@ public class UnitController : MonoBehaviour {
             if (!this.menuActive) {
                 CreateMenu();
                 this.menuActive = true;
+                selectedUnit.Moved = true;
             }
         }
         else if (Input.GetKeyDown(KeyCode.Mouse1) && selectedUnit != null && selectedUnit.Moved && selectedUnit.AttackSquare(x, y)) {
             if (this.menuActive) {
                 selectedUnit.Selected = false;
                 selectedUnit.Moved = false;
+                selectedUnit.TurnFinished = true;
                 selectedUnit = null;
                 this.menuActive = false;
             }
@@ -154,24 +156,27 @@ public class UnitController : MonoBehaviour {
         attackButton.GetComponent<SpriteRenderer>().transform.localScale = new Vector3(0.7f, 0.8f, 1);
         attackButton.AddComponent<BoxCollider2D>();
 
-        //GameObject moveButton = new GameObject {name = "moveButton"};
-        //moveButton.transform.SetParent(canvas.transform, true);
-        //moveButton.AddComponent<SpriteRenderer>();
-        //moveButton.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Tiles/Button");
-        //moveButton.GetComponent<SpriteRenderer>().transform.position = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, 10));
-        //moveButton.GetComponent<SpriteRenderer>().transform.localScale = new Vector3(0.7f, 0.8f, 1);
-        //moveButton.AddComponent<BoxCollider2D>();
+        GameObject specialButton = new GameObject {name = "specialButton"};
+        specialButton.transform.SetParent(canvas.transform, true);
+        specialButton.AddComponent<SpriteRenderer>();
+        specialButton.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Tiles/SpecialButton");
+        specialButton.GetComponent<SpriteRenderer>().transform.position = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, 10));
+        specialButton.GetComponent<SpriteRenderer>().transform.localScale = new Vector3(0.7f, 0.8f, 1);
+        specialButton.AddComponent<BoxCollider2D>();
     }
 
     public void ClickMenuButton() {
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && selectedUnit!= null) {
-            RaycastHit2D moveButtonHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-            if(moveButtonHit.collider == null) {
+            RaycastHit2D buttonHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            if(buttonHit.collider == null) {
                 return;
-            } else if (moveButtonHit.collider.name == "attackButton") {
+            } else if (buttonHit.collider.name == "attackButton") {
                 Debug.Log("Attack Button Clicked.");
-                selectedUnit.GenerateAttackGrid(true);
+                selectedUnit.GenerateAttackGrid();
+            } else if (buttonHit.collider.name == "specialButton") {
+                Debug.Log("Special Button Clicked.");
+                selectedUnit.SpecialOne();
             }
         }
     }

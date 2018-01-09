@@ -6,6 +6,7 @@ public abstract class Leader {
 
     protected Player player;
 
+    //methods------------------------------
     public Leader(Player player) {
         this.player = player;
     }

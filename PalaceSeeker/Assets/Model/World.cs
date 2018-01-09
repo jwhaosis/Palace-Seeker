@@ -11,24 +11,7 @@ public class World {
     int height;
     int tileCount;
 
-    //constructor
-    public World(int width = 20, int height = 20) {
-        this.width = width;
-        this.height = height;
-
-        this.tileArray = new Tile[width, height];
-        this.unitArray = new Unit[width, height];
-
-        for (int x=0; x<width; x++) {
-            for(int y=0; y<height; y++) {
-                tileArray[x, y] = new Tile(this, x, y);
-            }
-        }
-
-        Debug.Log("World created with " + (width*height) + " tiles");
-    }
-
-    //getters and setters-------------------------------------------------
+    //getters and setters------------------------------
     public int Width {
         get {
             return width;
@@ -62,7 +45,21 @@ public class World {
     }
 
 
-    //methods----------------------------------------------------
+    //methods------------------------------
+    public World(int width = 20, int height = 20) {
+        this.width = width;
+        this.height = height;
+
+        this.tileArray = new Tile[width, height];
+        this.unitArray = new Unit[width, height];
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                tileArray[x, y] = new Tile(this, x, y);
+            }
+        }
+    }
+
     public Tile GetTile (int x, int y) {
         if (x >= width || x < 0 || y >= height || y < 0) {
             return null;

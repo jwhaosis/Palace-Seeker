@@ -18,4 +18,8 @@ public class Fox : Unit {
         defense = 4;
     }
 
+    public override void SpecialOne() {
+        return;
+    }
+
 }

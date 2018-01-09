@@ -10,9 +10,9 @@ public class PyroJack : Enemy {
         movement = 2;
         rangeMin = 1;
         rangeMax = 1;
-        health = 8;
+        health = 15;
         attack = 10;
-        defense = 1;
+        defense = 0;
     }
 
 }

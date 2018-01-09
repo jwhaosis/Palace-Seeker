@@ -145,11 +145,9 @@ public class MapGenerator2 {
 
     private bool MapUndersized(int tileCount) {
         if (tileCount < 250) {
-            Debug.Log("Tilecount is " + tileCount + ", map is undersized.");
             return true;
         }
         else {
-            Debug.Log("Tilecount is " + tileCount + ", map is functional.");
             return false;
         }
     }

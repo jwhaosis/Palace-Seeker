@@ -10,19 +10,25 @@ public class Player {
     private Unit unitOne = null;
     private Unit unitTwo = null;
 
+    //getters and setters------------------------------
+
     public Leader Leader {
         get {
             return leader;
         }
     }
 
+
+    //methods------------------------------
     public Player(int playerNum) {
         this.playerNum = playerNum;
     }
 
-    public void ChangeAllUnitStats(Unit.UnitStats stat, int change) {
-        unitOne.ChangeUnitStats(stat, change);
-        unitTwo.ChangeUnitStats(stat, change);
+    public void ChangeAllUnitStats(Unit.UnitStats stat, int change, int duration) {
+        unitOne.ChangeUnitStats(stat, change, duration);
+        Debug.Log(unitOne.unitType + " gains " + change + " " + stat + " from leader bonuses.");
+        unitTwo.ChangeUnitStats(stat, change, duration);
+        Debug.Log(unitTwo.unitType + " gains " + change + " " + stat + " from leader bonuses.");
     }
 
     public bool AddLeader(Leader leader) {

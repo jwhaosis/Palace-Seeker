@@ -11,11 +11,14 @@ public class Panther : Unit {
         unitType = "Panther";
 
         movement = 6;
-        rangeMin = 1;
-        rangeMax = 1;
+        rangeMin = 2;
+        rangeMax = 2;
         health = 5;
         attack = 10;
         defense = 2;
     }
 
+    public override void SpecialOne() {
+        return;
+    }
 }

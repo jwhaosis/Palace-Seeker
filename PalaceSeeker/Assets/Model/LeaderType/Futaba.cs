@@ -9,6 +9,7 @@ public class Futaba : Leader {
     }
 
     public override void LeaderEffectStage0() {
-        player.ChangeAllUnitStats(Unit.UnitStats.Movement, 1);
+        player.ChangeAllUnitStats(Unit.UnitStats.Movement, 5, 0);
+        player.ChangeAllUnitStats(Unit.UnitStats.Attack, 2, 0);
     }
 }

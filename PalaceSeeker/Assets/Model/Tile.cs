@@ -17,7 +17,7 @@ public class Tile {
 
     Action<Tile> onTileTypeChange;
 
-    //getters and setters------------------------------------------------
+    //getters and setters------------------------------
     public TileType Type {
         get {
             return type;
@@ -41,7 +41,7 @@ public class Tile {
         }
     }
 
-    //methods----------------------------------------------------
+    //methods------------------------------
     public Tile( World map, int x, int y) {
         this.map = map;
         this.x = x;

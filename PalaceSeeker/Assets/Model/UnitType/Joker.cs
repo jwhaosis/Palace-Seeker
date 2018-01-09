@@ -18,4 +18,16 @@ public class Joker : Unit {
         defense = 5;
     }
 
+    public override void SpecialOne() {
+        if (Selected) {
+            ClearAllGrids();
+            specialSquares.Add(map.GetTile(x, y));
+            GetAdjacentSquares(x, y, 2, 1, "Tiles/SpecialTile", specialSquares);
+        }
+        else {
+            ClearAllGrids();
+            TurnFinished = true;
+        }
+    }
+
 }

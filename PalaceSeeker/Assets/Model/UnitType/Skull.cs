@@ -18,4 +18,8 @@ public class Skull : Unit {
         defense = 6;
     }
 
+    public override void SpecialOne() {
+        return;
+    }
+
 }

@@ -20,17 +20,26 @@ public abstract class Unit {
     protected GameObject unitObject;
     protected HashSet<Tile> movementSquares;
     protected HashSet<Tile> attackSquares;
+    protected HashSet<Tile> specialSquares;
     protected Player controller;
     public string unitType;
 
-    protected int movement;
     protected int rangeMin;
     protected int rangeMax;
     protected int health;
     protected int attack;
+    protected int[] attackBonuses;
     protected int defense;
+    protected int[] defenseBonuses;
+    protected int movement;
+    protected int[] movementBonuses;
 
-    //getters and setters--------------------------------------------------
+
+    protected string specialOneName;
+    protected string specialTwoName;
+    protected string specialThreeName;
+
+    //getters and setters------------------------------
     public int X {
         get {
             return x;
@@ -49,7 +58,7 @@ public abstract class Unit {
 
         set {
             selected = value;
-            GenerateMovementGrid(value);
+            GenerateMovementGrid();
         }
     }
 
@@ -60,6 +69,7 @@ public abstract class Unit {
 
         set {
             moved = value;
+            GenerateMovementGrid();
         }
     }
 
@@ -74,6 +84,12 @@ public abstract class Unit {
     }
 
     public int Health {
+        set {
+            health = value;
+            if (health <= 0) {
+                this.Delete();
+            }
+        }
         get {
             return health;
         }
@@ -81,15 +97,22 @@ public abstract class Unit {
 
     public int Attack {
         get {
-            return attack;
+            return GetTotalStats(UnitStats.Attack);
         }
     }
 
     public int Defense {
         get {
-            return defense;
+            return GetTotalStats(UnitStats.Defense);
         }
     }
+
+    public int Movement {
+        get {
+            return GetTotalStats(UnitStats.Movement);
+        }
+    }
+
 
     public Player Controller {
         get {
@@ -97,7 +120,7 @@ public abstract class Unit {
         }
     }
 
-    //methods--------------------------------------------------
+    //methods------------------------------
 
     protected Unit(World map, int x, int y, string sprite) {
         this.map = map;
@@ -105,6 +128,7 @@ public abstract class Unit {
         this.y = y;
         this.movementSquares = new HashSet<Tile>();
         this.attackSquares = new HashSet<Tile>();
+        this.specialSquares = new HashSet<Tile>();
 
         GameObject unitObject = new GameObject();
         unitObject.AddComponent<SpriteRenderer>().sortingLayerName = unitLayer;
@@ -117,6 +141,11 @@ public abstract class Unit {
         this.Selected = false;
         this.moved = false;
         this.turnFinished = false;
+
+        this.attackBonuses = new int[1];
+        this.defenseBonuses = new int[1];
+        this.movementBonuses = new int[1];
+
     }
 
     public bool MoveTo(int x, int y) {
@@ -139,8 +168,6 @@ public abstract class Unit {
                 this.x = x;
                 this.y = y;
                 unitObject.transform.position = new Vector3(x, y, 0);
-                GenerateMovementGrid(false);
-                moved = true;
                 return true;
             }
         } else {
@@ -161,7 +188,7 @@ public abstract class Unit {
             Unit targetUnit = map.GetUnit(x, y);
             if (targetUnit == null) {
                 Debug.Log("Can not attack an unoccupied square.");
-                GenerateAttackGrid(false);
+                GenerateAttackGrid();
                 return true;
             } else if (targetUnit.controller == this.controller) {
                 Debug.Log("Can not attack friendly units.");
@@ -171,7 +198,7 @@ public abstract class Unit {
                 Debug.Log("Attacked " + x + ", " + y + ".");
                 Combat thisCombat = new Combat(this, map.GetUnit(x, y));
                 thisCombat.CalculateCombat();
-                GenerateAttackGrid(false);
+                GenerateAttackGrid();
                 return true;
             }
         }
@@ -181,34 +208,58 @@ public abstract class Unit {
         }
     }
 
+    public abstract void SpecialOne();
 
-    public void GenerateMovementGrid(bool currentlySelected) {
-        if (currentlySelected) {
-            movementSquares.Add(map.GetTile(x, y));
-            GetAdjacentSquares(x, y, movement, 0, "Tiles/MovementTile", movementSquares);
-        } else {
-            movementSquares.Clear();
-            foreach (Transform child in this.unitObject.transform) {
-                GameObject.Destroy(child.gameObject);
-            }
+    //public abstract void SpecialTwo();
+
+    //public abstract void SpecialThree();
+
+    public void GenerateSelect() {
+        if (!Moved) {
+            GameObject selectTile = new GameObject { name = "SelectTile" };
+            selectTile.transform.SetParent(this.unitObject.transform, true);
+            selectTile.AddComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Tiles/SelectTile");
+            selectTile.GetComponent<SpriteRenderer>().sortingLayerName = actionLayer;
+            selectTile.transform.position = new Vector3(x, y, 0);
         }
     }
 
-    public void GenerateAttackGrid(bool currentlySelected) {
-        if (currentlySelected) {
+    public void GenerateMovementGrid() {
+        if (Selected && !Moved) {
+            ClearAllGrids();
+            movementSquares.Add(map.GetTile(x, y));
+            GetAdjacentSquares(x, y, this.Movement, 0, "Tiles/MovementTile", movementSquares);
+            GenerateSelect();
+        } else {
+            ClearAllGrids();
+        }
+    }
+
+    public void GenerateAttackGrid() {
+        if (Selected) {
+            ClearAllGrids();
             attackSquares.Add(map.GetTile(x, y));
             GetAdjacentSquares(x, y, rangeMax, rangeMin, "Tiles/AttackTile", attackSquares);
         }
         else {
-            movementSquares.Clear();
-            foreach (Transform child in this.unitObject.transform) {
-                GameObject.Destroy(child.gameObject);
-            }
-            turnFinished = true;
+            ClearAllGrids();
+            TurnFinished = true;
         }
     }
 
-    private void GetAdjacentSquares(int x, int y, int moveRemaining, int minRange, string sprite, HashSet<Tile> tileArray) {
+    protected void ClearAllGrids() {
+        movementSquares.Clear();
+        attackSquares.Clear();
+        specialSquares.Clear();
+        foreach (Transform child in this.unitObject.transform) {
+            if (!child.name.Contains("Select") || Selected == false) {
+                GameObject.Destroy(child.gameObject);
+            }
+        }
+
+    }
+
+    protected void GetAdjacentSquares(int x, int y, int moveRemaining, int minRange, string sprite, HashSet<Tile> tileArray) {
         if (moveRemaining <= 0) {
             return;
         } else {
@@ -234,7 +285,7 @@ public abstract class Unit {
 
     }
 
-    private void ShowVisuals(Tile tempTile, int moveRemaining, int minRange, string sprite, HashSet<Tile> tileArray) {
+    protected void ShowVisuals(Tile tempTile, int moveRemaining, int minRange, string sprite, HashSet<Tile> tileArray) {
         if(sprite.Contains("Movement") && map.GetUnit(tempTile.X, tempTile.Y) != null && map.GetUnit(tempTile.X, tempTile.Y).controller != this.controller) {
             return;
         }
@@ -250,20 +301,40 @@ public abstract class Unit {
         }
     }
 
-    public void ChangeUnitStats(Unit.UnitStats stat, int change) {
+    public void ChangeUnitStats(Unit.UnitStats stat, int change, int duration) {
         if(stat == UnitStats.Attack) {
-            attack += change;
+            attackBonuses[duration] += change;
         } else if (stat == UnitStats.Defense) {
-            defense += change;
+            defenseBonuses[duration] += change;
+        } else if (stat == UnitStats.Movement) {
+            movementBonuses[duration] += change;
+        } else {
+            Debug.Log("Not a valid stat to change.");
         }
-        else if (stat == UnitStats.Health) {
-            health += change;
-            if (health <= 0) {
-                this.Delete();
+    }
+
+    public int GetTotalStats(Unit.UnitStats stat) {
+        if(stat == UnitStats.Attack) {
+            int totalAttack = this.attack;
+            foreach (int buff in attackBonuses) {
+                totalAttack += buff;
             }
+            return totalAttack;
+        } else if (stat == UnitStats.Defense) {
+            int totalDefense = this.defense;
+            foreach (int buff in defenseBonuses) {
+                totalDefense += buff;
+            }
+            return totalDefense;
+        } else if (stat == UnitStats.Movement) {
+            int totalMove = this.movement;
+            foreach (int buff in movementBonuses) {
+                totalMove += buff;
+            }
+            return totalMove;
         }
-        else if (stat == UnitStats.Movement) {
-            movement += change;
+        else {
+            return 0;
         }
     }
 
@@ -273,4 +344,5 @@ public abstract class Unit {
         GameObject.Destroy(unitObject);
         
     }
+
 }
