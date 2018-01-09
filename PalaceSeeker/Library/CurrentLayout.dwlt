@@ -20,7 +20,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 2}
-  m_MinSize: {x: 950, y: 300}
+  m_MinSize: {x: 950, y: 392}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_MinSize: {x: 683, y: 342}
   m_MaxSize: {x: 12008, y: 8042}
   vertical: 0
-  controlID: 119
+  controlID: 50
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -176,8 +176,8 @@ MonoBehaviour:
     y: 0
     width: 244
     height: 707
-  m_MinSize: {x: 202, y: 221}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 13}
@@ -443,23 +443,23 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
-    m_LastClickedID: 0
-    m_ExpandedIDs: 2ccafaffd0d8faffd2fcfaffec10fbffba28fbff0641fbff9efbffff0000000018290000
+    m_SelectedIDs: f6280000
+    m_LastClickedID: 10486
+    m_ExpandedIDs: 86fbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: New Game Object
-      m_OriginalName: New Game Object
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: -311774
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 0
       m_ClientGUIView: {fileID: 8}
     m_SearchString: 
@@ -516,24 +516,24 @@ MonoBehaviour:
   m_LastProjectPath: E:\Users\Jimmy Wang\Documents\GitHub\Palace-Seeker\PalaceSeeker
   m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 137}
-    m_SelectedIDs: 7c270000
-    m_LastClickedID: 10108
-    m_ExpandedIDs: 0000000074270000ac270000d4270000ea270000fe2700003c28000048280000ffffff7f
+    scrollPos: {x: 0, y: 77}
+    m_SelectedIDs: 80270000
+    m_LastClickedID: 10112
+    m_ExpandedIDs: 0000000078270000b0270000d8270000ee270000062800004428000050280000ffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: Units
-      m_OriginalName: Units
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 10312
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 10}
     m_SearchString: 
@@ -547,7 +547,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000074270000ac270000d4270000ea270000fe2700003c28000048280000
+    m_ExpandedIDs: 0000000078270000b0270000d8270000ee270000062800004428000050280000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -572,10 +572,10 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 86270000
-    m_LastClickedInstanceID: 10118
+    m_SelectedInstanceIDs: f6280000
+    m_LastClickedInstanceID: 10486
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c62300009cc9fdff1e52fdffa0270000a4270000a8270000d6270000b0270000182c000064270000c62d0000e02d0000000000007e270000de270000e0290000ea270000282800005e280000
+    m_ExpandedInstanceIDs: c62300009cc9fdff1e52fdffa0270000a4270000a8270000d6270000b0270000182c000064270000c62d0000e02d0000000000007e270000de270000e0290000ea270000282800005e280000382d0000ae2800005c280000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

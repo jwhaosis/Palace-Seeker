@@ -9,6 +9,7 @@ public class WorldController : MonoBehaviour {
 
     public Sprite floorSprite;
     public Sprite wallSprite;
+    public Sprite waterSprite;
 
 
     World map;
@@ -60,9 +61,10 @@ public class WorldController : MonoBehaviour {
     void ChangeTileSprite(Tile tile_data, GameObject tile_go) {
         if (tile_data.Type == Tile.TileType.Floor) {
             tile_go.GetComponent<SpriteRenderer>().sprite = floorSprite;
-        }
-        else {
+        } else if (tile_data.Type == Tile.TileType.Wall) {
             tile_go.GetComponent<SpriteRenderer>().sprite = wallSprite;
+        } else if (tile_data.Type == Tile.TileType.Water) {
+            tile_go.GetComponent<SpriteRenderer>().sprite = waterSprite;
         }
     }
 

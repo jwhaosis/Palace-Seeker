@@ -10,8 +10,8 @@ public class Tile {
     int y;
 
     //data about the tile status
-    public enum TileType { Floor, Wall };
-    public static TileType[] unreachableTypes = { TileType.Wall };
+    public enum TileType { Floor, Wall, Water};
+    public static TileType[] unreachableTypes = { TileType.Wall, TileType.Water};
 
     TileType type = TileType.Floor;
 
