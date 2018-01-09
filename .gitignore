@@ -32,5 +32,3 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
-PalaceSeeker/.vs/PalaceSeeker/v15/Server/sqlite3/db.lock
-PalaceSeeker/Temp/UnityLockfile
