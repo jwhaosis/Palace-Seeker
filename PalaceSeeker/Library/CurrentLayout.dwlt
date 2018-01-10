@@ -443,23 +443,23 @@ MonoBehaviour:
   m_PersistentViewDataDictionary: {fileID: 0}
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: f6280000
-    m_LastClickedID: 10486
-    m_ExpandedIDs: 86fbffff00000000
+    m_SelectedIDs: 
+    m_LastClickedID: 0
+    m_ExpandedIDs: 9a57ffff9efbffff00000000fe28000022290000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: New Game Object
+      m_OriginalName: New Game Object
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: -44804
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 0
       m_ClientGUIView: {fileID: 8}
     m_SearchString: 
@@ -507,19 +507,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Resources/Tiles
+    - Assets/Model/UnitType
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Resources/Tiles
+  - Assets/Model/UnitType
   m_LastFoldersGridSize: -1
   m_LastProjectPath: E:\Users\Jimmy Wang\Documents\GitHub\Palace-Seeker\PalaceSeeker
   m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 77}
-    m_SelectedIDs: 80270000
-    m_LastClickedID: 10112
-    m_ExpandedIDs: 0000000078270000b0270000d8270000ee270000062800004428000050280000ffffff7f
+    scrollPos: {x: 0, y: 37}
+    m_SelectedIDs: 36280000
+    m_LastClickedID: 10294
+    m_ExpandedIDs: 0000000076270000ae270000d6270000ec27000004280000422800004e280000ffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -547,7 +547,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000078270000b0270000d8270000ee270000062800004428000050280000
+    m_ExpandedIDs: 0000000076270000ae270000d6270000ec27000004280000422800004e280000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -572,8 +572,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: f6280000
-    m_LastClickedInstanceID: 10486
+    m_SelectedInstanceIDs: 2e280000
+    m_LastClickedInstanceID: 10286
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300009cc9fdff1e52fdffa0270000a4270000a8270000d6270000b0270000182c000064270000c62d0000e02d0000000000007e270000de270000e0290000ea270000282800005e280000382d0000ae2800005c280000
     m_RenameOverlay:

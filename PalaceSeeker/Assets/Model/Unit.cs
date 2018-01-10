@@ -9,6 +9,7 @@ public abstract class Unit {
     protected static string unitLayer = "Unit";
     protected static string actionLayer = "UnitTiles";
     public enum UnitStats { Health, Attack, Defense, Movement };
+    public enum UnitCommands { Move, Attack, Special };
 
     protected World map;
     protected int x;
@@ -21,7 +22,7 @@ public abstract class Unit {
     protected HashSet<Tile> movementSquares;
     protected HashSet<Tile> attackSquares;
     protected HashSet<Tile> specialSquares;
-    protected Player controller;
+    public Player controller;
     public string unitType;
 
     protected int rangeMin;
@@ -188,17 +189,16 @@ public abstract class Unit {
             Unit targetUnit = map.GetUnit(x, y);
             if (targetUnit == null) {
                 Debug.Log("Can not attack an unoccupied square.");
-                GenerateAttackGrid();
-                return true;
+                return false;
             } else if (targetUnit.controller == this.controller) {
                 Debug.Log("Can not attack friendly units.");
                 return false;
             }
             else {
                 Debug.Log("Attacked " + x + ", " + y + ".");
-                Combat thisCombat = new Combat(this, map.GetUnit(x, y));
+                Combat thisCombat = new Combat(this, targetUnit);
                 thisCombat.CalculateCombat();
-                GenerateAttackGrid();
+                GenerateAttackGrid();           
                 return true;
             }
         }
@@ -208,7 +208,9 @@ public abstract class Unit {
         }
     }
 
-    public abstract void SpecialOne();
+    public abstract bool SpecialOne(int x, int y);
+
+    public abstract void SpecialOneGrid();
 
     //public abstract void SpecialTwo();
 
@@ -228,7 +230,8 @@ public abstract class Unit {
         if (Selected && !Moved) {
             ClearAllGrids();
             movementSquares.Add(map.GetTile(x, y));
-            GetAdjacentSquares(x, y, this.Movement, 0, "Tiles/MovementTile", movementSquares);
+            GenerateRange(x, y, this.Movement, UnitCommands.Move, movementSquares);
+            GenerateVisuals("Tiles/MovementTile", movementSquares);
             GenerateSelect();
         } else {
             ClearAllGrids();
@@ -239,7 +242,8 @@ public abstract class Unit {
         if (Selected) {
             ClearAllGrids();
             attackSquares.Add(map.GetTile(x, y));
-            GetAdjacentSquares(x, y, rangeMax, rangeMin, "Tiles/AttackTile", attackSquares);
+            GenerateRange(x, y, rangeMax, UnitCommands.Attack, attackSquares);
+            GenerateVisuals("Tiles/AttackTile", attackSquares);
         }
         else {
             ClearAllGrids();
@@ -259,45 +263,41 @@ public abstract class Unit {
 
     }
 
-    protected void GetAdjacentSquares(int x, int y, int moveRemaining, int minRange, string sprite, HashSet<Tile> tileArray) {
-        if (moveRemaining <= 0) {
-            return;
-        } else {
-            minRange--;
+    protected void GenerateRange(int x, int y, int moveRemaining, UnitCommands commandType, HashSet<Tile> tileArray) {
+        if (moveRemaining != 0) {
             moveRemaining--;
+            Tile[] surroundingTiles = new Tile[4];
+            surroundingTiles[0] = map.GetTile(x, y + 1);
+            surroundingTiles[1] = map.GetTile(x + 1, y);
+            surroundingTiles[2] = map.GetTile(x, y - 1);
+            surroundingTiles[3] = map.GetTile(x - 1, y);
+            foreach (Tile tile in surroundingTiles) {
+                if(commandType == UnitCommands.Move) {
+                    if (tile != null && !Tile.unreachableTypes.Contains(tile.Type)) {
+                        if(map.GetUnit(tile.X, tile.Y)==null || map.GetUnit(tile.X, tile.Y).controller == this.controller) {
+                            tileArray.Add(tile);
+                            GenerateRange(tile.X, tile.Y, moveRemaining, commandType, tileArray);
+                        }
+                    }
+                } else {
+                    if (tile != null) {
+                        tileArray.Add(tile);
+                        GenerateRange(tile.X, tile.Y, moveRemaining, commandType, tileArray);
+                    }
+                }
+            }
         }
-        if (y < map.Height - 1) {
-            Tile tile1 = map.GetTile(x, y + 1);
-            ShowVisuals(tile1, moveRemaining, minRange, sprite, tileArray);
-        }
-        if (x < map.Width - 1) {
-            Tile tile2 = map.GetTile(x + 1, y);
-            ShowVisuals(tile2, moveRemaining, minRange, sprite, tileArray);
-        }
-        if (y > 0) {
-            Tile tile3 = map.GetTile(x, y - 1);
-            ShowVisuals(tile3, moveRemaining, minRange, sprite, tileArray);
-        }
-        if (x > 0) {
-            Tile tile4 = map.GetTile(x - 1, y);
-            ShowVisuals(tile4, moveRemaining, minRange, sprite, tileArray);
-        }
-
     }
 
-    protected void ShowVisuals(Tile tempTile, int moveRemaining, int minRange, string sprite, HashSet<Tile> tileArray) {
-        if(sprite.Contains("Movement") && map.GetUnit(tempTile.X, tempTile.Y) != null && map.GetUnit(tempTile.X, tempTile.Y).controller != this.controller) {
-            return;
-        }
-        else if (!Tile.unreachableTypes.Contains(tempTile.Type)) {
-            if ((tileArray.Add(tempTile) && minRange<=0)) {
+    protected void GenerateVisuals(string sprite, HashSet<Tile> tileArray) {
+        foreach(Tile tile in tileArray) {
+            if(tile.X != this.X || tile.Y != this.Y) {
                 GameObject newTile = new GameObject();
                 newTile.transform.SetParent(this.unitObject.transform, true);
                 newTile.AddComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(sprite);
                 newTile.GetComponent<SpriteRenderer>().sortingLayerName = actionLayer;
-                newTile.transform.position = new Vector3(tempTile.X, tempTile.Y, 0);
+                newTile.transform.position = new Vector3(tile.X, tile.Y, 0);
             }
-            GetAdjacentSquares(tempTile.X, tempTile.Y, moveRemaining, minRange, sprite, tileArray);
         }
     }
 

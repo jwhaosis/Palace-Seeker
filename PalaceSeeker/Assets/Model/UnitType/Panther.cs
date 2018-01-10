@@ -18,7 +18,47 @@ public class Panther : Unit {
         defense = 2;
     }
 
-    public override void SpecialOne() {
-        return;
+    public override void SpecialOneGrid() {
+        if (Selected) {
+            ClearAllGrids();
+            GenerateRange(x, y, 3, UnitCommands.Special, specialSquares);
+            GenerateVisuals("Tiles/SpecialTile", specialSquares);
+        }
+        else {
+            ClearAllGrids();
+            TurnFinished = true;
+        }
+    }
+
+    public override bool SpecialOne(int x, int y) {
+        if (x == this.x && y == this.y) {
+            return false;
+        }
+        if (x >= map.Width || x < 0 || y >= map.Height || y < 0) {
+            Debug.Log("Can not attack outside of map.");
+            return false;
+        }
+        else if (specialSquares.Contains(map.GetTile(x, y))) {
+            Unit targetUnit = map.GetUnit(x, y);
+            if (targetUnit == null) {
+                Debug.Log("Can not attack an unoccupied square.");
+                return false;
+            }
+            else if (targetUnit.controller == this.controller) {
+                Debug.Log("Can not attack friendly units.");
+                return false;
+            }
+            else {
+                Debug.Log("Attacked " + x + ", " + y + ".");
+                Combat thisCombat = new Combat(this, targetUnit);
+                thisCombat.CalculateCombat();
+                SpecialOneGrid();
+                return true;
+            }
+        }
+        else {
+            Debug.Log("Out of attack range.");
+            return false;
+        }
     }
 }

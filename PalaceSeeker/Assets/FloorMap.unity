@@ -563,7 +563,7 @@ Prefab:
     - target: {fileID: 212455794622768070, guid: a3a6865ba5dbf0a47828f03fad2e35ee,
         type: 2}
       propertyPath: m_SortingLayer
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4808801730487248, guid: a3a6865ba5dbf0a47828f03fad2e35ee, type: 2}
       propertyPath: m_LocalPosition.x
@@ -585,6 +585,12 @@ Prefab:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 212455794622768070, guid: a3a6865ba5dbf0a47828f03fad2e35ee,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 23daab81b5f3eb5419a41e25aa79ca9e,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a3a6865ba5dbf0a47828f03fad2e35ee, type: 2}
   m_IsPrefabParent: 0

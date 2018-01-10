@@ -10,7 +10,11 @@ public class Enemy : Unit{
         this.controller = null;
     }
 
-    public override void SpecialOne() {
+    public override bool SpecialOne(int x, int y) {
+        return false;
+    }
+
+    public override void SpecialOneGrid() {
         return;
     }
 
