@@ -18,8 +18,11 @@ public class Fox : Unit {
         defense = 4;
     }
 
-    public override void SpecialOne() {
-        return;
+    public override bool SpecialOne(int x, int y) {
+        return false;
     }
 
+    public override void SpecialOneGrid() {
+        return;
+    }
 }

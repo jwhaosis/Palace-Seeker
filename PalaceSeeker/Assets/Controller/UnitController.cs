@@ -5,14 +5,16 @@ using UnityEngine;
 
 public class UnitController : MonoBehaviour {
 
+    public enum ActionButtons { Attack, SpecialOne, SpecialTwo, SpecialThree }
+
     public GameObject canvas;
 
     private static UnitController _instance;
 
     World map;
-
     Unit selectedUnit;
     bool menuActive;
+    ActionButtons actionButton;
 
     Vector3 mouseLocation;
 
@@ -110,8 +112,14 @@ public class UnitController : MonoBehaviour {
                 selectedUnit.Moved = true;
             }
         }
-        else if (Input.GetKeyDown(KeyCode.Mouse1) && selectedUnit != null && selectedUnit.Moved && selectedUnit.AttackSquare(x, y)) {
-            if (this.menuActive) {
+        else if (Input.GetKeyDown(KeyCode.Mouse1) && selectedUnit != null && selectedUnit.Moved) {
+            if (this.menuActive && actionButton==ActionButtons.Attack && selectedUnit.AttackSquare(x, y)) {
+                selectedUnit.Selected = false;
+                selectedUnit.Moved = false;
+                selectedUnit.TurnFinished = true;
+                selectedUnit = null;
+                this.menuActive = false;
+            } else if (this.menuActive && actionButton == ActionButtons.SpecialOne && selectedUnit.SpecialOne(x, y)) {
                 selectedUnit.Selected = false;
                 selectedUnit.Moved = false;
                 selectedUnit.TurnFinished = true;
@@ -174,9 +182,11 @@ public class UnitController : MonoBehaviour {
             } else if (buttonHit.collider.name == "attackButton") {
                 Debug.Log("Attack Button Clicked.");
                 selectedUnit.GenerateAttackGrid();
+                actionButton = ActionButtons.Attack;
             } else if (buttonHit.collider.name == "specialButton") {
                 Debug.Log("Special Button Clicked.");
-                selectedUnit.SpecialOne();
+                selectedUnit.SpecialOneGrid();
+                actionButton = ActionButtons.SpecialOne;
             }
         }
     }

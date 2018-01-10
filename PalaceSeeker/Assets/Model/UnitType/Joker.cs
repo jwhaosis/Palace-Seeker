@@ -18,11 +18,11 @@ public class Joker : Unit {
         defense = 5;
     }
 
-    public override void SpecialOne() {
+    public override void SpecialOneGrid() {
         if (Selected) {
             ClearAllGrids();
-            specialSquares.Add(map.GetTile(x, y));
-            GetAdjacentSquares(x, y, 2, 1, "Tiles/SpecialTile", specialSquares);
+            GenerateRange(x, y, 3, UnitCommands.Special, specialSquares);
+            GenerateVisuals("Tiles/SpecialTile", specialSquares);
         }
         else {
             ClearAllGrids();
@@ -30,4 +30,34 @@ public class Joker : Unit {
         }
     }
 
+    public override bool SpecialOne(int x, int y) {
+        if (x == this.x && y == this.y) {
+            return false;
+        }
+        if (x >= map.Width || x < 0 || y >= map.Height || y < 0) {
+            Debug.Log("Can not buff outside of map.");
+            return false;
+        }
+        else if (specialSquares.Contains(map.GetTile(x, y))) {
+            Unit targetUnit = map.GetUnit(x, y);
+            if (targetUnit == null) {
+                Debug.Log("Can not buff an unoccupied square.");
+                return false;
+            }
+            else if (targetUnit.controller != this.controller) {
+                Debug.Log("Can not buff enemy units.");
+                return false;
+            }
+            else {
+                Debug.Log("Buffing unit at " + x + ", " + y + ".");
+                targetUnit.ChangeUnitStats(UnitStats.Movement, 2, 0);
+                SpecialOneGrid();
+                return true;
+            }
+        }
+        else {
+            Debug.Log("Out of buff range.");
+            return false;
+        }
+    }
 }
