@@ -11,7 +11,6 @@ public class Player {
     private Unit unitTwo = null;
 
     //getters and setters------------------------------
-
     public Leader Leader {
         get {
             return leader;

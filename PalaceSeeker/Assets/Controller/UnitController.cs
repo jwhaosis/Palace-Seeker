@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class UnitController : MonoBehaviour {
 
-    public enum ActionButtons { Attack, SpecialOne, SpecialTwo, SpecialThree }
+    public enum ActionButtons { Attack, SpecialOne, SpecialTwo, SpecialThree, Unclicked }
 
     public GameObject canvas;
 
@@ -19,6 +19,7 @@ public class UnitController : MonoBehaviour {
     Vector3 mouseLocation;
 
     private void Awake() {
+        actionButton = ActionButtons.Unclicked;
         _instance = this;
         enabled = false;
     }
@@ -175,18 +176,29 @@ public class UnitController : MonoBehaviour {
 
     public void ClickMenuButton() {
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && selectedUnit!= null) {
+        if (selectedUnit!= null && selectedUnit.Moved) {
             RaycastHit2D buttonHit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if(buttonHit.collider == null) {
+                if(actionButton.Equals(ActionButtons.Unclicked)) {
+                    selectedUnit.ClearAllGrids();
+                }
                 return;
             } else if (buttonHit.collider.name == "attackButton") {
-                Debug.Log("Attack Button Clicked.");
-                selectedUnit.GenerateAttackGrid();
-                actionButton = ActionButtons.Attack;
+                if (Input.GetKeyDown(KeyCode.Mouse0)) {
+                    Debug.Log("Attack Button Clicked.");
+                    actionButton = ActionButtons.Attack;
+                } else if (actionButton != ActionButtons.Attack && buttonHit.collider.name.Contains("Button")) {
+                    actionButton = ActionButtons.Unclicked;
+                }
+                selectedUnit.GenerateGrid(selectedUnit.RangeMax, Unit.UnitCommands.Attack);
             } else if (buttonHit.collider.name == "specialButton") {
-                Debug.Log("Special Button Clicked.");
+                if (Input.GetKeyDown(KeyCode.Mouse0)) {
+                    Debug.Log("Special Button Clicked.");
+                    actionButton = ActionButtons.SpecialOne;
+                } else if (actionButton != ActionButtons.SpecialOne && buttonHit.collider.name.Contains("Button")) {
+                    actionButton = ActionButtons.Unclicked;
+                }
                 selectedUnit.SpecialOneGrid();
-                actionButton = ActionButtons.SpecialOne;
             }
         }
     }
