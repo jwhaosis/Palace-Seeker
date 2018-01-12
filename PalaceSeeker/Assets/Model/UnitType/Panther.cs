@@ -19,15 +19,7 @@ public class Panther : Unit {
     }
 
     public override void SpecialOneGrid() {
-        if (Selected) {
-            ClearAllGrids();
-            GenerateRange(x, y, 3, UnitCommands.Special, specialSquares);
-            GenerateVisuals("Tiles/SpecialTile", specialSquares);
-        }
-        else {
-            ClearAllGrids();
-            TurnFinished = true;
-        }
+        GenerateGrid(4, UnitCommands.Special);
     }
 
     public override bool SpecialOne(int x, int y) {
@@ -52,7 +44,7 @@ public class Panther : Unit {
                 Debug.Log("Attacked " + x + ", " + y + ".");
                 Combat thisCombat = new Combat(this, targetUnit);
                 thisCombat.CalculateCombat();
-                SpecialOneGrid();
+                TurnFinished = true;
                 return true;
             }
         }

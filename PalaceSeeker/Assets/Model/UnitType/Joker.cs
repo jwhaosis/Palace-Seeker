@@ -19,15 +19,7 @@ public class Joker : Unit {
     }
 
     public override void SpecialOneGrid() {
-        if (Selected) {
-            ClearAllGrids();
-            GenerateRange(x, y, 3, UnitCommands.Special, specialSquares);
-            GenerateVisuals("Tiles/SpecialTile", specialSquares);
-        }
-        else {
-            ClearAllGrids();
-            TurnFinished = true;
-        }
+        GenerateGrid(3, UnitCommands.Special);
     }
 
     public override bool SpecialOne(int x, int y) {
@@ -51,7 +43,7 @@ public class Joker : Unit {
             else {
                 Debug.Log("Buffing unit at " + x + ", " + y + ".");
                 targetUnit.ChangeUnitStats(UnitStats.Movement, 2, 0);
-                SpecialOneGrid();
+                TurnFinished = true;
                 return true;
             }
         }

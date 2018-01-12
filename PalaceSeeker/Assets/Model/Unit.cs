@@ -59,7 +59,7 @@ public abstract class Unit {
 
         set {
             selected = value;
-            GenerateMovementGrid();
+            GenerateGrid(Movement, UnitCommands.Move);
         }
     }
 
@@ -70,7 +70,7 @@ public abstract class Unit {
 
         set {
             moved = value;
-            GenerateMovementGrid();
+            ClearAllGrids();
         }
     }
 
@@ -81,6 +81,17 @@ public abstract class Unit {
 
         set {
             turnFinished = value;
+            if (turnFinished) {
+                movementSquares.Clear();
+                attackSquares.Clear();
+                specialSquares.Clear();
+            }
+        }
+    }
+
+    public int RangeMax {
+        get {
+            return rangeMax;
         }
     }
 
@@ -130,6 +141,9 @@ public abstract class Unit {
         this.movementSquares = new HashSet<Tile>();
         this.attackSquares = new HashSet<Tile>();
         this.specialSquares = new HashSet<Tile>();
+        this.attackBonuses = new int[1];
+        this.defenseBonuses = new int[1];
+        this.movementBonuses = new int[1];
 
         GameObject unitObject = new GameObject();
         unitObject.AddComponent<SpriteRenderer>().sortingLayerName = unitLayer;
@@ -142,75 +156,12 @@ public abstract class Unit {
         this.Selected = false;
         this.moved = false;
         this.turnFinished = false;
-
-        this.attackBonuses = new int[1];
-        this.defenseBonuses = new int[1];
-        this.movementBonuses = new int[1];
-
     }
 
-    public bool MoveTo(int x, int y) {
-        if (x >= map.Width || x < 0 || y >= map.Height || y < 0) {
-            Debug.Log("Can not move out of map.");
-            return false;
-        }
-        else if (Tile.unreachableTypes.Contains(map.GetTile(x, y).Type)) {
-            Debug.Log("Can not move over invalid tiles.");
-            return false;
-        }
-        else if (movementSquares.Contains(map.GetTile(x, y))) {
-            if (map.GetUnit(x, y) != null && map.GetUnit(x, y) != this) {
-                Debug.Log("Can not move to an occupied square.");
-                return false;
-            }
-            else {
-                map.UnitArray[this.x, this.y] = null;
-                map.UnitArray[x, y] = this;
-                this.x = x;
-                this.y = y;
-                unitObject.transform.position = new Vector3(x, y, 0);
-                return true;
-            }
-        } else {
-            Debug.Log("Out of movement range.");
-            return false;
-        }
-    }
-
-    public bool AttackSquare(int x, int y) {
-        if (x == this.x && y == this.y) {
-            return false;
-        }
-        if (x >= map.Width || x < 0 || y >= map.Height || y < 0) {
-            Debug.Log("Can not attack outside of map.");
-            return false;
-        }
-        else if (attackSquares.Contains(map.GetTile(x, y))) {
-            Unit targetUnit = map.GetUnit(x, y);
-            if (targetUnit == null) {
-                Debug.Log("Can not attack an unoccupied square.");
-                return false;
-            } else if (targetUnit.controller == this.controller) {
-                Debug.Log("Can not attack friendly units.");
-                return false;
-            }
-            else {
-                Debug.Log("Attacked " + x + ", " + y + ".");
-                Combat thisCombat = new Combat(this, targetUnit);
-                thisCombat.CalculateCombat();
-                GenerateAttackGrid();           
-                return true;
-            }
-        }
-        else {
-            Debug.Log("Out of attack range.");
-            return false;
-        }
-    }
+    public abstract void SpecialOneGrid();
 
     public abstract bool SpecialOne(int x, int y);
 
-    public abstract void SpecialOneGrid();
 
     //public abstract void SpecialTwo();
 
@@ -226,35 +177,35 @@ public abstract class Unit {
         }
     }
 
-    public void GenerateMovementGrid() {
-        if (Selected && !Moved) {
-            ClearAllGrids();
-            movementSquares.Add(map.GetTile(x, y));
-            GenerateRange(x, y, this.Movement, UnitCommands.Move, movementSquares);
-            GenerateVisuals("Tiles/MovementTile", movementSquares);
-            GenerateSelect();
+    public void GenerateGrid(int maxRange, UnitCommands command) {
+        string sprite;
+        HashSet<Tile> tileArray;
+        if (command == UnitCommands.Move) {
+            sprite = "Tiles/MovementTile";
+            tileArray = movementSquares;    
+        } else if (command == UnitCommands.Attack) {
+            sprite = "Tiles/AttackTile";
+            tileArray = attackSquares;
+        } else if (command == UnitCommands.Special) {
+            sprite = "Tiles/SpecialTile";
+            tileArray = specialSquares;
         } else {
-            ClearAllGrids();
+            Debug.LogError("Not a valid command.");
+            sprite = "Tiles/SelectTile";
+            tileArray = new HashSet<Tile>();
         }
-    }
-
-    public void GenerateAttackGrid() {
+        ClearAllGrids();
         if (Selected) {
-            ClearAllGrids();
-            attackSquares.Add(map.GetTile(x, y));
-            GenerateRange(x, y, rangeMax, UnitCommands.Attack, attackSquares);
-            GenerateVisuals("Tiles/AttackTile", attackSquares);
-        }
-        else {
-            ClearAllGrids();
-            TurnFinished = true;
-        }
+            if (tileArray.Any() == false) {
+                tileArray.Add(map.GetTile(x, y));
+                GenerateRange(x, y, maxRange, command, tileArray);
+            }
+            GenerateVisuals(sprite, tileArray);
+            GenerateSelect();
+        } 
     }
 
-    protected void ClearAllGrids() {
-        movementSquares.Clear();
-        attackSquares.Clear();
-        specialSquares.Clear();
+    public void ClearAllGrids() {
         foreach (Transform child in this.unitObject.transform) {
             if (!child.name.Contains("Select") || Selected == false) {
                 GameObject.Destroy(child.gameObject);
@@ -298,6 +249,58 @@ public abstract class Unit {
                 newTile.GetComponent<SpriteRenderer>().sortingLayerName = actionLayer;
                 newTile.transform.position = new Vector3(tile.X, tile.Y, 0);
             }
+        }
+    }
+    public bool MoveTo(int x, int y) {
+        if (x >= map.Width || x < 0 || y >= map.Height || y < 0) {
+            Debug.Log("Can not move out of map.");
+            return false;
+        } else if (Tile.unreachableTypes.Contains(map.GetTile(x, y).Type)) {
+            Debug.Log("Can not move over invalid tiles.");
+            return false;
+        } else if (movementSquares.Contains(map.GetTile(x, y))) {
+            if (map.GetUnit(x, y) != null && map.GetUnit(x, y) != this) {
+                Debug.Log("Can not move to an occupied square.");
+                return false;
+            } else {
+                map.UnitArray[this.x, this.y] = null;
+                map.UnitArray[x, y] = this;
+                this.x = x;
+                this.y = y;
+                unitObject.transform.position = new Vector3(x, y, 0);
+                return true;
+            }
+        } else {
+            Debug.Log("Out of movement range.");
+            return false;
+        }
+    }
+
+    public bool AttackSquare(int x, int y) {
+        if (x == this.x && y == this.y) {
+            return false;
+        }
+        if (x >= map.Width || x < 0 || y >= map.Height || y < 0) {
+            Debug.Log("Can not attack outside of map.");
+            return false;
+        } else if (attackSquares.Contains(map.GetTile(x, y))) {
+            Unit targetUnit = map.GetUnit(x, y);
+            if (targetUnit == null) {
+                Debug.Log("Can not attack an unoccupied square.");
+                return false;
+            } else if (targetUnit.controller == this.controller) {
+                Debug.Log("Can not attack friendly units.");
+                return false;
+            } else {
+                Debug.Log("Attacked " + x + ", " + y + ".");
+                Combat thisCombat = new Combat(this, targetUnit);
+                thisCombat.CalculateCombat();
+                TurnFinished = true;
+                return true;
+            }
+        } else {
+            Debug.Log("Out of attack range.");
+            return false;
         }
     }
 
