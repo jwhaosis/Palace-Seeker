@@ -22,7 +22,7 @@ public abstract class Unit {
     protected HashSet<Tile> movementSquares;
     protected HashSet<Tile> attackSquares;
     protected HashSet<Tile> specialSquares;
-    public Player controller;
+    protected Player controller;
     public string unitType;
 
     protected int rangeMin;
@@ -59,7 +59,9 @@ public abstract class Unit {
 
         set {
             selected = value;
+
             GenerateGrid(Movement, UnitCommands.Move);
+            ClearFogOfWar();
         }
     }
 
@@ -81,11 +83,9 @@ public abstract class Unit {
 
         set {
             turnFinished = value;
-            if (turnFinished) {
-                movementSquares.Clear();
-                attackSquares.Clear();
-                specialSquares.Clear();
-            }
+            movementSquares.Clear();
+            attackSquares.Clear();
+            specialSquares.Clear();
         }
     }
 
@@ -167,7 +167,7 @@ public abstract class Unit {
 
     //public abstract void SpecialThree();
 
-    public void GenerateSelect() {
+    /*public void GenerateSelect() {
         if (!Moved) {
             GameObject selectTile = new GameObject { name = "SelectTile" };
             selectTile.transform.SetParent(this.unitObject.transform, true);
@@ -175,7 +175,7 @@ public abstract class Unit {
             selectTile.GetComponent<SpriteRenderer>().sortingLayerName = actionLayer;
             selectTile.transform.position = new Vector3(x, y, 0);
         }
-    }
+    }*/
 
     public void GenerateGrid(int maxRange, UnitCommands command) {
         string sprite;
@@ -201,7 +201,7 @@ public abstract class Unit {
                 GenerateRange(x, y, maxRange, command, tileArray);
             }
             GenerateVisuals(sprite, tileArray);
-            GenerateSelect();
+            //GenerateSelect();
         } 
     }
 
@@ -212,6 +212,12 @@ public abstract class Unit {
             }
         }
 
+    }
+
+    public void Refresh() {
+        this.Selected = false;
+        this.Moved = false;
+        this.TurnFinished = false;
     }
 
     protected void GenerateRange(int x, int y, int moveRemaining, UnitCommands commandType, HashSet<Tile> tileArray) {
@@ -304,6 +310,20 @@ public abstract class Unit {
         }
     }
 
+    public void ClearFogOfWar() {
+        int hits = 0;
+        foreach (Tile tile in movementSquares) {
+            RaycastHit2D checkFog = Physics2D.Linecast(unitObject.transform.position, new Vector3(tile.X, tile.Y, 0));
+            if (checkFog.collider != null && checkFog.collider.name.Contains("Fog")) {
+                hits += 1;
+                GameObject.Destroy(checkFog.collider.gameObject);
+            }
+        }
+        if (hits != 0) {
+            ClearFogOfWar();
+        }
+    }
+
     public void ChangeUnitStats(Unit.UnitStats stat, int change, int duration) {
         if(stat == UnitStats.Attack) {
             attackBonuses[duration] += change;
@@ -343,9 +363,11 @@ public abstract class Unit {
 
     public void Delete() {
         Debug.Log("Unit GameObject Deleted.");
-        this.map.UnitArray[this.x, this.y] = null;
+        map.UnitArray[x, y] = null;
+        if (controller != null) {
+            controller.RemoveUnit(this);
+        }
         GameObject.Destroy(unitObject);
-        
     }
 
 }

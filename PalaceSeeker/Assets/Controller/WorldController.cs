@@ -41,9 +41,19 @@ public class WorldController : MonoBehaviour {
                     name = "Tile_" + x + "_" + y
                 };
 
+                GameObject fog_go = new GameObject {
+                    name = "Fog_" + x + "_" + y
+                };
+
                 tile_go.AddComponent<SpriteRenderer>().sortingLayerName = layer;
                 tile_go.transform.position = new Vector3(tile_data.X, tile_data.Y, 0);
                 tile_go.transform.SetParent(this.transform, true);
+
+                fog_go.AddComponent<SpriteRenderer>().sortingLayerName = "FogOfWar";
+                fog_go.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Tiles/FogOfWar");
+                fog_go.transform.position = new Vector3(tile_data.X, tile_data.Y, 0);
+                fog_go.transform.SetParent(this.transform, true);
+                fog_go.AddComponent<BoxCollider2D>();
 
                 //add visual rendering to onTileTypeChange in tile class
                 tile_data.AddOnTileTypeChangeAction((tile) => { ChangeTileSprite(tile, tile_go); });
@@ -62,7 +72,7 @@ public class WorldController : MonoBehaviour {
         if (tile_data.Type == Tile.TileType.Floor) {
             tile_go.GetComponent<SpriteRenderer>().sprite = floorSprite;
         } else if (tile_data.Type == Tile.TileType.Wall) {
-            tile_go.GetComponent<SpriteRenderer>().sprite = wallSprite;
+            tile_go.GetComponent<SpriteRenderer>().sprite = waterSprite;
         } else if (tile_data.Type == Tile.TileType.Water) {
             tile_go.GetComponent<SpriteRenderer>().sprite = waterSprite;
         }

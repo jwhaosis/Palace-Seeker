@@ -36,7 +36,7 @@ public class Panther : Unit {
                 Debug.Log("Can not attack an unoccupied square.");
                 return false;
             }
-            else if (targetUnit.controller == this.controller) {
+            else if (targetUnit.Controller == this.Controller) {
                 Debug.Log("Can not attack friendly units.");
                 return false;
             }

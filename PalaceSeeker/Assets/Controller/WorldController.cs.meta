@@ -1,11 +1,14 @@
 fileFormatVersion: 2
 guid: fd34566645d7b46449d6c28ae1816bf3
-timeCreated: 1514401693
+timeCreated: 1515789199
 licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - floorSprite: {fileID: 21300000, guid: 7cbe05fbba6a4d74aaaa6a4ccf9c807f, type: 3}
+  - wallSprite: {fileID: 21300000, guid: 6632563fb47a93e43971ae345097295d, type: 3}
+  - waterSprite: {fileID: 21300000, guid: b8294eff12e391d40a4ef8d64d9cc210, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

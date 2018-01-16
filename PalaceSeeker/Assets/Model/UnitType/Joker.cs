@@ -36,7 +36,7 @@ public class Joker : Unit {
                 Debug.Log("Can not buff an unoccupied square.");
                 return false;
             }
-            else if (targetUnit.controller != this.controller) {
+            else if (targetUnit.Controller != this.Controller) {
                 Debug.Log("Can not buff enemy units.");
                 return false;
             }

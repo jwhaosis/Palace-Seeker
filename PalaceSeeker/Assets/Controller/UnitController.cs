@@ -29,6 +29,8 @@ public class UnitController : MonoBehaviour {
 
     void Update () {
         mouseLocation = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseLocation.x += 0.5f;
+        mouseLocation.y += 0.5f;
         if (Input.GetKeyDown("space")) {
             CreateMenu();
         }
@@ -47,12 +49,31 @@ public class UnitController : MonoBehaviour {
     public void Initialize(World map) {
         this.map = map;
         enabled = true;
-        map.TileArray[4, 4].Type = Tile.TileType.Floor;
-        map.UnitArray[4, 4] = new PyroJack(this.map, 4, 4);
 
-        map.TileArray[6, 2].Type = Tile.TileType.Floor;
-        map.UnitArray[6, 2] = new PyroJack(this.map, 6, 2);
+        RandomSpawns();
+    }
 
+    private void RandomSpawns() {
+        int x, y, min;
+        min = 6;
+        for (int a = 0; a < 2; a++) {
+            do {
+                x = Random.Range(min, 20);
+                y = Random.Range(min, 20);
+            } while (Tile.unreachableTypes.Contains(map.GetTile(x, y).Type));
+            map.UnitArray[x, y] = new PyroJack(this.map, x, y);
+            do {
+                x = Random.Range(0, min);
+                y = Random.Range(min, 20);
+            } while (Tile.unreachableTypes.Contains(map.GetTile(x, y).Type));
+            map.UnitArray[x, y] = new PyroJack(this.map, x, y);
+            do {
+                x = Random.Range(min, 20);
+                y = Random.Range(0, min);
+            } while (Tile.unreachableTypes.Contains(map.GetTile(x, y).Type));
+            map.UnitArray[x, y] = new PyroJack(this.map, x, y);
+            min += 10;
+        }
     }
 
     public void CreateUnit(int charCode) {
@@ -201,5 +222,11 @@ public class UnitController : MonoBehaviour {
                 selectedUnit.SpecialOneGrid();
             }
         }
+    }
+
+    public void EndTurn() {
+        this.selectedUnit = null;
+        this.actionButton = ActionButtons.Unclicked;
+        this.menuActive = false;
     }
 }
