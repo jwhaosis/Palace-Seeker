@@ -50,6 +50,12 @@ TagManager:
   - name: Unit
     uniqueID: 1009655581
     locked: 0
+  - name: FoWTile
+    uniqueID: 2383136753
+    locked: 0
+  - name: FogOfWar
+    uniqueID: 3525112547
+    locked: 0
   - name: UnitTiles
     uniqueID: 3048363687
     locked: 0

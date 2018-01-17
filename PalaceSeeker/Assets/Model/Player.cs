@@ -5,10 +5,9 @@ using UnityEngine.UI;
 
 public class Player {
 
-    private int playerNum;
+    public int playerNum;
     private Leader leader = null;
-    private Unit unitOne = null;
-    private Unit unitTwo = null;
+    private List<Unit> unitList;
 
     //getters and setters------------------------------
     public Leader Leader {
@@ -21,13 +20,20 @@ public class Player {
     //methods------------------------------
     public Player(int playerNum) {
         this.playerNum = playerNum;
+        this.unitList = new List<Unit>();
+    }
+
+    public void RefreshUnits() {
+        foreach(Unit unit in unitList) {
+            unit.Refresh();
+        }
     }
 
     public void ChangeAllUnitStats(Unit.UnitStats stat, int change, int duration) {
-        unitOne.ChangeUnitStats(stat, change, duration);
-        Debug.Log(unitOne.unitType + " gains " + change + " " + stat + " from leader bonuses.");
-        unitTwo.ChangeUnitStats(stat, change, duration);
-        Debug.Log(unitTwo.unitType + " gains " + change + " " + stat + " from leader bonuses.");
+        foreach (Unit unit in unitList) {
+            unit.ChangeUnitStats(stat, change, duration);
+            Debug.Log(unit.unitType + " gains " + change + " " + stat + " from leader bonuses.");
+        }
     }
 
     public bool AddLeader(Leader leader) {
@@ -43,27 +49,24 @@ public class Player {
     }
 
     public bool AddUnit(Unit unit) {
-        if (this.unitOne == null) {
-            this.unitOne = unit;
-            Debug.Log("Unit added to unit one.");
-            return true;
-        } else if (this.unitTwo == null) {
-            this.unitTwo = unit;
-            Debug.Log("Unit added to unit two.");
-            return true;
-        } else {
-            Debug.Log("Full on units.");
-            unit.Delete();
-            return false;
-        }
+        unitList.Add(unit);
+        Debug.Log("Unit added as unit " + unitList.Count);
+        return true;
     }
 
+    public bool RemoveUnit(Unit unit) {
+        unitList.Remove(unit);
+        Debug.Log("Unit removed.");
+        return true;
+    }
+
+
     public bool IsCompleteUnits() {
-        return unitOne != null && unitTwo != null;
+        return unitList.Count == 2;
     }
 
     public bool IsCompleteAll() {
-        return unitOne != null && unitTwo != null && leader != null;
+        return IsCompleteUnits() && leader != null;
     }
 
 

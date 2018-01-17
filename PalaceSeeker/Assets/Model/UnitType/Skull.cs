@@ -26,7 +26,7 @@ public class Skull : Unit {
         this.ChangeUnitStats(UnitStats.Attack, 10, 0);
         foreach (Tile tile in specialSquares) {
             Unit target = map.GetUnit(tile.X, tile.Y);
-            if (target!=null && target.controller!=this.controller) {
+            if (target!=null && target.Controller != this.Controller) {
                 Combat thisCombat = new Combat(this, target);
                 thisCombat.CalculateCombat();
             }

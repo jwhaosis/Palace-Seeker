@@ -17,6 +17,8 @@ public class MouseController : MonoBehaviour {
 
     void Update() {
         currFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        currFramePosition.x += 0.5f;
+        currFramePosition.y += 0.5f;
         currFramePosition.z = 0;
 
         UpdateCursor();
